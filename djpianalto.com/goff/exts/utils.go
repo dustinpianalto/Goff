@@ -19,6 +19,16 @@ func pingCommand(ctx anpan.Context, _ []string) error {
 	return err
 }
 
+func gitCommand(ctx anpan.Context, _ []string) error {
+	embed := &discordgo.MessageEmbed{
+		Title: "Hi there, My code is on Github",
+		Color: 0,
+		URL:   "https://github.com/dustinpianalto/Goff",
+	}
+	_, err := ctx.Session.ChannelMessageSendEmbed(ctx.Channel.ID, embed)
+	return err
+}
+
 func sayCommand(ctx anpan.Context, args []string) error {
 	resp := strings.Join(args, " ")
 	resp = strings.ReplaceAll(resp, "@everyone", "@\ufff0everyone")

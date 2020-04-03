@@ -14,4 +14,5 @@ func AddCommandHandlers(h *anpan.CommandHandler) {
 	h.AddCommand("ping", "Check the bot's ping", false, false, 0, anpan.CommandTypeEverywhere, pingCommand)
 	h.AddCommand("say", "Repeat a message", false, false, 0, anpan.CommandTypeEverywhere, sayCommand)
 	h.AddCommand("user", "Show info about a user", false, false, 0, anpan.CommandTypeEverywhere, userCommand)
+	h.AddCommand("git", "Show my github link", false, false, 0, anpan.CommandTypeEverywhere, gitCommand)
 }
