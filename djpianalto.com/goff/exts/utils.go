@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func PingCommand(ctx anpan.Context, _ []string) error {
+func pingCommand(ctx anpan.Context, _ []string) error {
 	timeBefore := time.Now()
 	msg, _ := ctx.Reply("Pong!")
 	took := time.Now().Sub(timeBefore)
@@ -19,7 +19,7 @@ func PingCommand(ctx anpan.Context, _ []string) error {
 	return err
 }
 
-func SayCommand(ctx anpan.Context, args []string) error {
+func sayCommand(ctx anpan.Context, args []string) error {
 	resp := strings.Join(args, " ")
 	resp = strings.ReplaceAll(resp, "@everyone", "@\ufff0everyone")
 	resp = strings.ReplaceAll(resp, "@here", "@\ufff0here")
@@ -27,7 +27,7 @@ func SayCommand(ctx anpan.Context, args []string) error {
 	return err
 }
 
-func UserCommand(ctx anpan.Context, args []string) error {
+func userCommand(ctx anpan.Context, args []string) error {
 	var member *discordgo.Member
 	if len(args) == 0 {
 		member, _ = ctx.Session.GuildMember(ctx.Guild.ID, ctx.Message.Author.ID)

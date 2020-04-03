@@ -41,17 +41,12 @@ func main() {
 	// check perms - bool
 	handler := anpan.NewCommandHandler(prefixes, owners, true, true)
 
-	// Arguments:
-	// name - command name - string
-	// desc - command description - string
-	// owneronly - only allow owners to run - bool
-	// hidden - hide command from non-owners - bool
-	// perms - permissisions required - anpan.Permission (int)
-	// type - command type, sets where the command is available
-	// run - function to run - func(anpan.Context, []string) / CommandRunFunc
-	handler.AddCommand("ping", "Check the bot's ping", false, false, 0, anpan.CommandTypeEverywhere, exts.PingCommand)
-	handler.AddCommand("say", "Repeat a message", false, false, 0, anpan.CommandTypeEverywhere, exts.SayCommand)
-	handler.AddCommand("user", "Show info about a user", false, false, 0, anpan.CommandTypeEverywhere, exts.UserCommand)
+	// Add Command Handlers
+	exts.AddCommandHandlers(&handler)
+
+	if _, ok := handler.Commands["help"]; !ok {
+		handler.AddDefaultHelpCommand()
+	}
 
 	dg.AddHandler(handler.OnMessage)
 	dg.AddHandler(handler.StatusHandler.OnReady)
@@ -68,5 +63,8 @@ func main() {
 	<-sc
 
 	fmt.Println("Shutting Down...")
-	dg.Close()
+	err = dg.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
