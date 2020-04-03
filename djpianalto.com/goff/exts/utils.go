@@ -15,16 +15,16 @@ func PingCommand(ctx anpan.Context, _ []string) error {
 	timeBefore := time.Now()
 	msg, _ := ctx.Reply("Pong!")
 	took := time.Now().Sub(timeBefore)
-	ctx.Session.ChannelMessageEdit(ctx.Message.ChannelID, msg.ID, fmt.Sprintf("Pong!\nPing Took **%s**", took.String()))
-	return nil
+	_, err := ctx.Session.ChannelMessageEdit(ctx.Message.ChannelID, msg.ID, fmt.Sprintf("Pong!\nPing Took **%s**", took.String()))
+	return err
 }
 
 func SayCommand(ctx anpan.Context, args []string) error {
 	resp := strings.Join(args, " ")
 	resp = strings.ReplaceAll(resp, "@everyone", "@\ufff0everyone")
 	resp = strings.ReplaceAll(resp, "@here", "@\ufff0here")
-	ctx.Session.ChannelMessageSend(ctx.Message.ChannelID, resp)
-	return nil
+	_, err := ctx.Session.ChannelMessageSend(ctx.Message.ChannelID, resp)
+	return err
 }
 
 func UserCommand(ctx anpan.Context, args []string) error {
@@ -97,6 +97,6 @@ func UserCommand(ctx anpan.Context, args []string) error {
 			rolesField,
 		},
 	}
-	ctx.Session.ChannelMessageSendEmbed(ctx.Channel.ID, embed)
-	return nil
+	_, err := ctx.Session.ChannelMessageSendEmbed(ctx.Channel.ID, embed)
+	return err
 }
