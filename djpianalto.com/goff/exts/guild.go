@@ -2,6 +2,7 @@ package exts
 
 import (
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
+	"fmt"
 	"github.com/dustinpianalto/disgoman"
 	"strconv"
 	"strings"
@@ -45,5 +46,28 @@ func loggingChannel(ctx disgoman.Context, args []string) error {
 		return err
 	}
 	_, _ = ctx.Send("Logging Channel Updated.")
+	return nil
+}
+
+func getLoggingCommand(ctx disgoman.Context, _ []string) error {
+	var channelID string
+	row := utils.Database.QueryRow("SELECT logging_channel FROM guilds where id=$1", ctx.Guild.ID)
+	err := row.Scan(channelID)
+	if err != nil {
+		fmt.Println(err)
+		_, _ = ctx.Send("Error getting data from the database.")
+		return err
+	}
+	if channelID == "" {
+		_, _ = ctx.Send("The logging channel is not set.")
+		return nil
+	}
+	channel, err := ctx.Session.State.GuildChannel(ctx.Guild.ID, channelID)
+	if err != nil {
+		fmt.Println(err)
+		_, _ = ctx.Send("I got the channel ID but it does not appear to be a valid channel in this guild.")
+		return err
+	}
+	_, _ = ctx.Send(fmt.Sprintf("The logging channel is currently %s", channel.Mention()))
 	return nil
 }
