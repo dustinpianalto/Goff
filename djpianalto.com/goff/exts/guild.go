@@ -49,7 +49,7 @@ func loggingChannel(ctx disgoman.Context, args []string) error {
 	return nil
 }
 
-func getLoggingCommand(ctx disgoman.Context, _ []string) error {
+func getLoggingChannel(ctx disgoman.Context, _ []string) error {
 	var channelID string
 	row := utils.Database.QueryRow("SELECT logging_channel FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(channelID)

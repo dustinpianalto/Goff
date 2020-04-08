@@ -94,4 +94,13 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: disgoman.PermissionManageServer,
 		Invoke:              loggingChannel,
 	})
+	h.AddCommand(&disgoman.Command{
+		Name:                "get-logging-channel",
+		Aliases:             []string{"glc"},
+		Description:         "Gets the channel logging messages will be sent to.",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              getLoggingChannel,
+	})
 }
