@@ -4,7 +4,6 @@ import (
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"fmt"
 	"github.com/dustinpianalto/disgoman"
-	"strconv"
 	"strings"
 )
 
@@ -20,13 +19,8 @@ func loggingChannel(ctx disgoman.Context, args []string) error {
 	} else {
 		idString = "0"
 	}
-	id, err := strconv.ParseInt(idString, 10, 64)
-	if err != nil {
-		_, _ = ctx.Send("An invalid ID was passed.")
-		return err
-	}
-	if id == 0 {
-		_, err = utils.Database.Exec("UPDATE guilds SET logging_channel=NULL WHERE id=$1;", ctx.Guild.ID)
+	if idString == "" {
+		_, err := utils.Database.Exec("UPDATE guilds SET logging_channel=NULL WHERE id=$1;", ctx.Guild.ID)
 		if err != nil {
 			_, _ = ctx.Send("Error Updating Database")
 		}
@@ -40,7 +34,7 @@ func loggingChannel(ctx disgoman.Context, args []string) error {
 		_, _ = ctx.Send("The channel passed is not in this guild.")
 		return err
 	}
-	_, err = utils.Database.Exec("UPDATE guilds SET logging_channel=$1 WHERE id=$2;", id, ctx.Guild.ID)
+	_, err = utils.Database.Exec("UPDATE guilds SET logging_channel=$1 WHERE id=$2;", idString, ctx.Guild.ID)
 	if err != nil {
 		_, _ = ctx.Send("Error Updating Database")
 		return err
