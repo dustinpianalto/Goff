@@ -3,23 +3,39 @@ package exts
 import (
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"fmt"
-	"github.com/MikeModder/anpan"
 	"github.com/bwmarrin/discordgo"
+	"github.com/dustinpianalto/disgoman"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func pingCommand(ctx anpan.Context, _ []string) error {
+func pingCommand(ctx disgoman.Context, _ []string) error {
 	timeBefore := time.Now()
-	msg, _ := ctx.Reply("Pong!")
+	msg, _ := ctx.Send("Pong!")
 	took := time.Now().Sub(timeBefore)
 	_, err := ctx.Session.ChannelMessageEdit(ctx.Message.ChannelID, msg.ID, fmt.Sprintf("Pong!\nPing Took **%s**", took.String()))
 	return err
 }
 
-func gitCommand(ctx anpan.Context, _ []string) error {
+func inviteCommand(ctx disgoman.Context, args []string) error {
+	var ids []string
+	if len(args) == 0 {
+		ids = []string{ctx.Session.State.User.ID}
+	} else {
+		for _, id := range args {
+			ids = append(ids, id)
+		}
+	}
+	for _, id := range ids {
+		url := fmt.Sprintf("<https://discordapp.com/oauth2/authorize?client_id=%v&scope=bot>", id)
+		ctx.Send(url)
+	}
+	return nil
+}
+
+func gitCommand(ctx disgoman.Context, _ []string) error {
 	embed := &discordgo.MessageEmbed{
 		Title: "Hi there, My code is on Github",
 		Color: 0,
@@ -29,7 +45,7 @@ func gitCommand(ctx anpan.Context, _ []string) error {
 	return err
 }
 
-func sayCommand(ctx anpan.Context, args []string) error {
+func sayCommand(ctx disgoman.Context, args []string) error {
 	resp := strings.Join(args, " ")
 	resp = strings.ReplaceAll(resp, "@everyone", "@\ufff0everyone")
 	resp = strings.ReplaceAll(resp, "@here", "@\ufff0here")
@@ -37,7 +53,7 @@ func sayCommand(ctx anpan.Context, args []string) error {
 	return err
 }
 
-func userCommand(ctx anpan.Context, args []string) error {
+func userCommand(ctx disgoman.Context, args []string) error {
 	var member *discordgo.Member
 	if len(args) == 0 {
 		member, _ = ctx.Session.GuildMember(ctx.Guild.ID, ctx.Message.Author.ID)

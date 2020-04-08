@@ -2,8 +2,10 @@ package main
 
 import (
 	"djpianalto.com/goff/djpianalto.com/goff/exts"
+	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"fmt"
-	"github.com/MikeModder/anpan"
+	"github.com/dustinpianalto/disgoman"
+	//"github.com/MikeModder/anpan"
 	"github.com/bwmarrin/discordgo"
 	"os"
 	"os/signal"
@@ -26,10 +28,15 @@ func main() {
 		fmt.Println("There was an error when creating the Discord Session, ", err)
 		return
 	}
+	dg.State.MaxMessageCount = 100
 
-	prefixes := []string{
-		"Go.",
-	}
+	utils.ConnectDatabase(os.Getenv("DATABASE_URL"))
+	utils.InitializeDatabase()
+	//utils.LoadTestData()
+
+	//prefixes := []string{
+	//	"Go.",
+	//}
 	owners := []string{
 		"351794468870946827",
 	}
@@ -39,17 +46,25 @@ func main() {
 	// owner ids   - []string
 	// ignore bots - bool
 	// check perms - bool
-	handler := anpan.NewCommandHandler(prefixes, owners, true, true)
+	handler := disgoman.CommandManager{
+		Prefixes:         getPrefixes,
+		Owners:           owners,
+		StatusManager:    disgoman.GetDefaultStatusManager(),
+		OnErrorFunc:      nil,
+		Commands:         make(map[string]*disgoman.Command),
+		IgnoreBots:       true,
+		CheckPermissions: false,
+	}
 
 	// Add Command Handlers
 	exts.AddCommandHandlers(&handler)
 
-	if _, ok := handler.Commands["help"]; !ok {
-		handler.AddDefaultHelpCommand()
-	}
+	//if _, ok := handler.Commands["help"]; !ok {
+	//	handler.AddDefaultHelpCommand()
+	//}
 
 	dg.AddHandler(handler.OnMessage)
-	dg.AddHandler(handler.StatusHandler.OnReady)
+	dg.AddHandler(handler.StatusManager.OnReady)
 
 	err = dg.Open()
 	if err != nil {
@@ -67,4 +82,8 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func getPrefixes(guild_id string) []string {
+	return []string{"Go.", "go."}
 }
