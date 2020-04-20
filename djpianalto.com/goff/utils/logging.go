@@ -13,7 +13,7 @@ type LogEvent struct {
 	// Guild to log event in
 	GuildID string
 	// Discordgo Session. Needed for sending messages
-	Session discordgo.Session
+	Session *discordgo.Session
 }
 
 func LoggingHandler(lc chan *LogEvent) {

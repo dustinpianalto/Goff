@@ -76,7 +76,7 @@ func kickUser(ctx disgoman.Context, args []string) {
 			Color:     0xff8c00,
 		},
 		GuildID: ctx.Guild.ID,
-		Session: *ctx.Session,
+		Session: ctx.Session,
 	}
 	utils.LoggingChannel <- event
 	_, _ = ctx.Send(fmt.Sprintf("User %v#%v has been kicked.", member.User.Username, member.User.Discriminator))
