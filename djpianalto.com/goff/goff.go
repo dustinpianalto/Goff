@@ -50,7 +50,7 @@ func main() {
 		Prefixes:         getPrefixes,
 		Owners:           owners,
 		StatusManager:    disgoman.GetDefaultStatusManager(),
-		OnErrorFunc:      nil,
+		ErrorChannel:     make(chan disgoman.CommandError, 10),
 		Commands:         make(map[string]*disgoman.Command),
 		IgnoreBots:       true,
 		CheckPermissions: false,
@@ -58,6 +58,9 @@ func main() {
 
 	// Add Command Handlers
 	exts.AddCommandHandlers(&handler)
+
+	// Start the Error handler in a goroutine
+	go ErrorHandler(handler.ErrorChannel)
 
 	//if _, ok := handler.Commands["help"]; !ok {
 	//	handler.AddDefaultHelpCommand()
@@ -86,4 +89,10 @@ func main() {
 
 func getPrefixes(guild_id string) []string {
 	return []string{"Go.", "go."}
+}
+
+func ErrorHandler(ErrorChan chan disgoman.CommandError) {
+	for ce := range ErrorChan {
+		_, _ = ce.Context.Send(ce.Message)
+	}
 }
