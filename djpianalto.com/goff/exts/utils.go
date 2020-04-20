@@ -94,6 +94,7 @@ func userCommand(ctx disgoman.Context, args []string) {
 				Message: "Couldn't get that member",
 				Error:   err,
 			}
+			return
 		}
 	}
 	thumb := &discordgo.MessageEmbedThumbnail{
