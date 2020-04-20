@@ -176,3 +176,30 @@ func getWelcomeChannel(ctx disgoman.Context, _ []string) {
 	}
 	_, _ = ctx.Send(fmt.Sprintf("The welcome channel is currently %s", channel.Mention()))
 }
+
+func addGuild(ctx disgoman.Context, args []string) {
+	var guildID string
+	row := utils.Database.QueryRow("SELECT id FROM guilds where id=$1", ctx.Guild.ID)
+	err := row.Scan(&guildID)
+	if err == nil {
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "This guild is already in my database",
+			Error:   err,
+		}
+		return
+	}
+
+	_, err = utils.Database.Query("INSERT INTO guilds (id) VALUES ($1)", ctx.Guild.ID)
+	if err != nil {
+		fmt.Println(err)
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "There was a problem inserting this guild into the database",
+			Error:   err,
+		}
+		return
+	}
+	_, _ = ctx.Send("This guild has been added.")
+
+}
