@@ -62,6 +62,9 @@ func main() {
 	// Start the Error handler in a goroutine
 	go ErrorHandler(handler.ErrorChannel)
 
+	// Start the Logging handler in a goroutine
+	go utils.LoggingHandler(utils.LoggingChannel)
+
 	//if _, ok := handler.Commands["help"]; !ok {
 	//	handler.AddDefaultHelpCommand()
 	//}
