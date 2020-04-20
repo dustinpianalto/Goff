@@ -13,7 +13,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	// perms - permissisions required - anpan.Permission (int)
 	// type - command type, sets where the command is available
 	// run - function to run - func(anpan.Context, []string) / CommandRunFunc
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "ping",
 		Aliases:             nil,
 		Description:         "Check the bot's ping",
@@ -22,7 +22,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              pingCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "say",
 		Aliases:             nil,
 		Description:         "Repeat a message",
@@ -31,7 +31,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              sayCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "user",
 		Aliases:             nil,
 		Description:         "Get user info",
@@ -40,7 +40,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              userCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "git",
 		Aliases:             nil,
 		Description:         "Show my github link",
@@ -49,7 +49,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              gitCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "tag",
 		Aliases:             nil,
 		Description:         "Get a tag",
@@ -58,7 +58,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              tagCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "addtag",
 		Aliases:             nil,
 		Description:         "Add a tag",
@@ -67,7 +67,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              addTagCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "invite",
 		Aliases:             nil,
 		Description:         "Get the invite link for this bot or others",
@@ -76,7 +76,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              inviteCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "P",
 		Aliases:             nil,
 		Description:         "Interpret a P\" program and return the results",
@@ -85,7 +85,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              pCommand,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "set-logging-channel",
 		Aliases:             []string{"slc"},
 		Description:         "Set the channel logging messages will be sent to.",
@@ -94,7 +94,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: disgoman.PermissionManageServer,
 		Invoke:              loggingChannel,
 	})
-	h.AddCommand(&disgoman.Command{
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "get-logging-channel",
 		Aliases:             []string{"glc"},
 		Description:         "Gets the channel logging messages will be sent to.",
@@ -102,5 +102,23 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		Hidden:              false,
 		RequiredPermissions: disgoman.PermissionManageServer,
 		Invoke:              getLoggingChannel,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "set-welcome-channel",
+		Aliases:             []string{"swc"},
+		Description:         "Set the channel welcome messages will be sent to.",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              welcomeChannel,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "get-welcome-channel",
+		Aliases:             []string{"gwc"},
+		Description:         "Gets the channel welcome messages will be sent to.",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              getWelcomeChannel,
 	})
 }
