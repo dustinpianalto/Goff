@@ -35,8 +35,8 @@ func InitializeDatabase() {
 	}
 	_, err = Database.Query("CREATE TABLE IF NOT EXISTS guilds(" +
 		"id varchar(30) primary key," +
-		"welcome_message varchar(1000)," +
-		"goodbye_message varchar(1000)," +
+		"welcome_message varchar(1000) NOT NULL DEFAULT ''," +
+		"goodbye_message varchar(1000) NOT NULL DEFAULT ''," +
 		"logging_channel varchar(30) NOT NULL DEFAULT ''," +
 		"welcome_channel varchar(30) NOT NULL DEFAULT ''" +
 		")")
