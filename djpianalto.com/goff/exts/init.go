@@ -123,11 +123,20 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	})
 	_ = h.AddCommand(&disgoman.Command{
 		Name:                "kick",
-		Aliases:             []string{""},
+		Aliases:             nil,
 		Description:         "Kicks the given user with the given reason",
 		OwnerOnly:           false,
 		Hidden:              false,
 		RequiredPermissions: disgoman.PermissionKickMembers,
 		Invoke:              kickUser,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "addGuild",
+		Aliases:             nil,
+		Description:         "Adds the current guild to the database",
+		OwnerOnly:           true,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              addGuild,
 	})
 }
