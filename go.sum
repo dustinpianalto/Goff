@@ -6,6 +6,8 @@ github.com/dustinpianalto/disgoman v0.0.0-20200420005144-c3143ea66130 h1:J967RgB
 github.com/dustinpianalto/disgoman v0.0.0-20200420005144-c3143ea66130/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
 github.com/dustinpianalto/disgoman v0.0.0-20200420022152-4729d2c5ee3e h1:EeLjjVHZNa9DCpOftoKDZalSwO7usn9yhRwXXz2RSdA=
 github.com/dustinpianalto/disgoman v0.0.0-20200420022152-4729d2c5ee3e/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
+github.com/dustinpianalto/disgoman v0.0.0-20200420041406-a10b5cdbec0d h1:nVmxBFiOB/okyXp31ka5DSP+OnwpZF2CJDopRsM8c9E=
+github.com/dustinpianalto/disgoman v0.0.0-20200420041406-a10b5cdbec0d/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
 github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 h1:Z9n2FFNUXsshfwJMBgNA0RU6/i7WVaAegv3PtuIHPMs=
