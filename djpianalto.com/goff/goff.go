@@ -93,6 +93,10 @@ func getPrefixes(guild_id string) []string {
 
 func ErrorHandler(ErrorChan chan disgoman.CommandError) {
 	for ce := range ErrorChan {
-		_, _ = ce.Context.Send(ce.Message)
+		msg := ce.Message
+		if msg == "" {
+			msg = ce.Error.Error()
+		}
+		_, _ = ce.Context.Send(msg)
 	}
 }
