@@ -2,6 +2,7 @@ package exts
 
 import (
 	"errors"
+	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustinpianalto/disgoman"
 	"strings"
@@ -48,6 +49,10 @@ func kickUser(ctx disgoman.Context, args []string) {
 		err = ctx.Session.GuildMemberDelete(ctx.Guild.ID, member.User.ID)
 	}
 	if err != nil {
-
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: fmt.Sprintf("Something went wrong kicking %v", member.User.Username),
+			Error:   err,
+		}
 	}
 }

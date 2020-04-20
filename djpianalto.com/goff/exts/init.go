@@ -121,4 +121,13 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: disgoman.PermissionManageServer,
 		Invoke:              getWelcomeChannel,
 	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "kick",
+		Aliases:             []string{""},
+		Description:         "Kicks the given user with the given reason",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionKickMembers,
+		Invoke:              kickUser,
+	})
 }
