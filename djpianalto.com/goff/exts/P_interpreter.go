@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func pCommand(ctx disgoman.Context, args []string) error {
+func pCommand(ctx disgoman.Context, args []string) {
 	input := strings.Join(args, "")
 	const LENGTH = 1999
 	var mem [LENGTH]byte
@@ -57,8 +57,12 @@ func pCommand(ctx disgoman.Context, args []string) error {
 				}
 			}
 		} else {
-			ctx.Send(fmt.Sprintf("Invalid Character: %v", input[i]))
-			return errors.New("invalid character")
+			ctx.ErrorChannel <- disgoman.CommandError{
+				Context: ctx,
+				Message: fmt.Sprintf("Invalid Character: %v", input[i]),
+				Error:   errors.New("invalid character"),
+			}
+			return
 		}
 	}
 	var out []byte
@@ -67,11 +71,14 @@ func pCommand(ctx disgoman.Context, args []string) error {
 			out = append(out, i)
 		}
 	}
-	fmt.Println(out)
 	_, err := ctx.Send(string(out))
 	if err != nil {
-		fmt.Println(err)
-		return err
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Couldn't send results",
+			Error:   err,
+		}
+		return
 	}
-	return nil
+	return
 }
