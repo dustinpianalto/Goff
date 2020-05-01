@@ -157,4 +157,13 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: disgoman.PermissionBanMembers,
 		Invoke:              unbanUserCommand,
 	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "remind",
+		Aliases:             nil,
+		Description:         "Remind me at a later time",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              addReminderCommand,
+	})
 }

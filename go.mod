@@ -7,4 +7,5 @@ require (
 	github.com/dustinpianalto/disgoman v0.0.0-20200420065246-662acb500b0c
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
 	github.com/lib/pq v1.3.0
+	github.com/olebedev/when v0.0.0-20190311101825-c3b538a97254
 )
