@@ -59,12 +59,6 @@ func main() {
 	// Add Command Handlers
 	exts.AddCommandHandlers(&handler)
 
-	// Start the Error handler in a goroutine
-	go ErrorHandler(handler.ErrorChannel)
-
-	// Start the Logging handler in a goroutine
-	go utils.LoggingHandler(utils.LoggingChannel)
-
 	//if _, ok := handler.Commands["help"]; !ok {
 	//	handler.AddDefaultHelpCommand()
 	//}
@@ -77,6 +71,15 @@ func main() {
 		fmt.Println("There was an error opening the connection, ", err)
 		return
 	}
+
+	// Start the Error handler in a goroutine
+	go ErrorHandler(handler.ErrorChannel)
+
+	// Start the Logging handler in a goroutine
+	go utils.LoggingHandler(utils.LoggingChannel)
+
+	// Start the task handler in a goroutine
+	go utils.ProcessTasks(dg, 10)
 
 	fmt.Println("The Bot is now running.")
 	sc := make(chan os.Signal, 1)
