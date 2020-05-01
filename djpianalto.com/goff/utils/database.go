@@ -75,6 +75,17 @@ func InitializeDatabase() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	_, err = Database.Query("CREATE TABLE IF NOT EXISTS tasks(" +
+		"id serial primary key," +
+		"content text not null," +
+		"guild_id varchar(30) not null references guild(id)," +
+		"channel_id varchar(30) not null," +
+		"user_id varchar(30) not null," +
+		"creation_time timestamp not null default NOW()," +
+		"trigger_time timestamp not null)")
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func LoadTestData() {
