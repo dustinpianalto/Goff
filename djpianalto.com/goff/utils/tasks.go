@@ -19,6 +19,8 @@ type Task struct {
 }
 
 func processTask(task *Task, s *discordgo.Session) {
+	closeQuery := "Update tasks set completed = true where id = $1"
+	defer Database.Exec(closeQuery, task.ID)
 	log.Println(fmt.Sprintf("Processing task %v", task.ID))
 	guild, err := s.Guild(task.GuildID)
 	if err != nil {
