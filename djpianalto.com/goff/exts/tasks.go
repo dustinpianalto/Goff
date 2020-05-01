@@ -50,6 +50,6 @@ func addReminderCommand(ctx disgoman.Context, args []string) {
 	_ = ctx.Session.MessageReactionAdd(ctx.Channel.ID, ctx.Message.ID, "✅")
 	_, _ = ctx.Session.ChannelMessageSend(
 		ctx.Channel.ID,
-		fmt.Sprintf("I will remind you at %v, with `%v`", r.Time.String(), content),
+		fmt.Sprintf("I will remind you at %v, with `%v`", r.Time.Format(time.RFC1123), content),
 	)
 }
