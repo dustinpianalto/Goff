@@ -77,7 +77,7 @@ func InitializeDatabase() {
 	}
 	_, err = Database.Query("CREATE TABLE IF NOT EXISTS tasks(" +
 		"id serial primary key," +
-		"type varchar(10) not null" +
+		"type varchar(10) not null," +
 		"content text not null," +
 		"guild_id varchar(30) not null references guilds(id)," +
 		"channel_id varchar(30) not null," +
