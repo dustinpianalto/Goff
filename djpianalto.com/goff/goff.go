@@ -101,5 +101,6 @@ func ErrorHandler(ErrorChan chan disgoman.CommandError) {
 			msg = ce.Error.Error()
 		}
 		_, _ = ce.Context.Send(msg)
+		fmt.Println(ce.Error)
 	}
 }

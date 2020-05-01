@@ -177,7 +177,7 @@ func getWelcomeChannel(ctx disgoman.Context, _ []string) {
 	_, _ = ctx.Send(fmt.Sprintf("The welcome channel is currently %s", channel.Mention()))
 }
 
-func addGuild(ctx disgoman.Context, args []string) {
+func addGuildCommand(ctx disgoman.Context, args []string) {
 	var guildID string
 	row := utils.Database.QueryRow("SELECT id FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(&guildID)

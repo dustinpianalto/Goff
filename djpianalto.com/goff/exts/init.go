@@ -128,15 +128,33 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		OwnerOnly:           false,
 		Hidden:              false,
 		RequiredPermissions: disgoman.PermissionKickMembers,
-		Invoke:              kickUser,
+		Invoke:              kickUserCommand,
 	})
 	_ = h.AddCommand(&disgoman.Command{
-		Name:                "addGuild",
+		Name:                "addGuildCommand",
 		Aliases:             nil,
 		Description:         "Adds the current guild to the database",
 		OwnerOnly:           true,
 		Hidden:              false,
 		RequiredPermissions: disgoman.PermissionManageServer,
-		Invoke:              addGuild,
+		Invoke:              addGuildCommand,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "ban",
+		Aliases:             []string{"ban-no-delete"},
+		Description:         "Bans the given user with the given reason",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionBanMembers,
+		Invoke:              banUserCommand,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "unban",
+		Aliases:             nil,
+		Description:         "Unbans the given user",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionBanMembers,
+		Invoke:              unbanUserCommand,
 	})
 }
