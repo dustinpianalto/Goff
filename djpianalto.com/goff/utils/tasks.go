@@ -19,6 +19,7 @@ type Task struct {
 }
 
 func processTask(task *Task, s *discordgo.Session) {
+	log.Println(fmt.Sprintf("Processing task %v", task.ID))
 	guild, err := s.Guild(task.GuildID)
 	if err != nil {
 		log.Print(fmt.Sprintf("Can't find guild with ID %v. Canceling task %v.", task.GuildID, task.ID))
