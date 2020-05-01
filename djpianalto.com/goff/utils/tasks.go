@@ -45,7 +45,7 @@ func processTask(task *Task, s *discordgo.Session) {
 	}
 }
 
-func getTasksToRun(s *discordgo.Session) []Task {
+func getTasksToRun() []Task {
 	query := "SELECT id, type, content, guild_id, channel_id, user_id, creation_time, trigger_time " +
 		"from tasks where completed is false and trigger_time < $1"
 	res, err := Database.Query(query, time.Now())
@@ -69,7 +69,7 @@ func ProcessTasks(s *discordgo.Session, interval int) {
 	for {
 		time.Sleep(time.Duration(interval))
 
-		tasks := getTasksToRun(s)
+		tasks := getTasksToRun()
 
 		if len(tasks) > 0 {
 			for _, t := range tasks {
