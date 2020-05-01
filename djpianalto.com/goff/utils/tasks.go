@@ -67,7 +67,7 @@ func getTasksToRun() []Task {
 
 func ProcessTasks(s *discordgo.Session, interval int) {
 	for {
-		time.Sleep(time.Duration(interval))
+		time.Sleep(time.Duration(interval * 1e9))
 
 		tasks := getTasksToRun()
 
