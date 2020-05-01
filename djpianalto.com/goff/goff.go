@@ -78,7 +78,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("The Bot is now running. Press Ctrl+C to exit.")
+	fmt.Println("The Bot is now running.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
