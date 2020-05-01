@@ -79,7 +79,7 @@ func main() {
 	go utils.LoggingHandler(utils.LoggingChannel)
 
 	// Start the task handler in a goroutine
-	go utils.ProcessTasks(dg, 10)
+	go utils.ProcessTasks(dg, 1)
 
 	fmt.Println("The Bot is now running.")
 	sc := make(chan os.Signal, 1)
