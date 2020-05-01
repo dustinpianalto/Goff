@@ -3,6 +3,7 @@ package exts
 import (
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"errors"
+	"fmt"
 	"github.com/dustinpianalto/disgoman"
 	"github.com/olebedev/when"
 	"github.com/olebedev/when/rules/common"
@@ -37,5 +38,18 @@ func addReminderCommand(ctx disgoman.Context, args []string) {
 	content := strings.Replace(text, r.Text, "", 1)
 	query := "INSERT INTO tasks (type, content, guild_id, channel_id, user_id, trigger_time) " +
 		"VALUES ('Reminder', $1, $2, $3, $4, $5)"
-	utils.Database.Exec(query, content, ctx.Guild.ID, ctx.Channel.ID, ctx.User.ID, r.Time)
+	_, err = utils.Database.Exec(query, content, ctx.Guild.ID, ctx.Channel.ID, ctx.User.ID, r.Time)
+	if err != nil {
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Error adding task to database",
+			Error:   err,
+		}
+		return
+	}
+	_ = ctx.Session.MessageReactionAdd(ctx.Channel.ID, ctx.Message.ID, "✅")
+	_, _ = ctx.Session.ChannelMessageSend(
+		ctx.Channel.ID,
+		fmt.Sprintf("I will remind you at %v, with `%v`", r.Time.String(), content),
+	)
 }
