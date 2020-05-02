@@ -42,8 +42,21 @@ func processTask(task *Task, s *discordgo.Session) {
 		return
 	}
 	if task.Type == "Reminder" {
-		msg := fmt.Sprintf("%v REMINDER:\n%v", member.Mention(), task.Content)
-		s.ChannelMessageSend(channel.ID, msg)
+		color := s.State.UserColor(member.User.ID, channel.ID)
+		e := discordgo.MessageEmbed{
+			Title:       "REMINDER",
+			Description: task.Content,
+			Timestamp:   task.CreationTime.Format(time.RFC1123),
+			Color:       color,
+			Footer: &discordgo.MessageEmbedFooter{
+				Text: fmt.Sprintf("Created At: %v", task.CreationTime.Format(time.RFC1123)),
+			},
+		}
+		msg := discordgo.MessageSend{
+			Content: member.Mention(),
+			Embed:   &e,
+		}
+		_, _ = s.ChannelMessageSendComplex(channel.ID, &msg)
 	}
 }
 
