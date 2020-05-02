@@ -56,7 +56,10 @@ func processTask(task *Task, s *discordgo.Session) {
 			Content: member.Mention(),
 			Embed:   &e,
 		}
-		_, _ = s.ChannelMessageSendComplex(channel.ID, &msg)
+		_, err = s.ChannelMessageSendComplex(channel.ID, &msg)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
 
