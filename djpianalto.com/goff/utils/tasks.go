@@ -48,7 +48,7 @@ func processTask(task *Task, s *discordgo.Session) {
 			Description: task.Content,
 			Color:       color,
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: fmt.Sprintf("Created At: %v", task.CreationTime.Format(time.RFC1123)),
+				Text: fmt.Sprintf("Created: %v", task.CreationTime.Format(time.RFC1123)),
 			},
 		}
 		msg := discordgo.MessageSend{
