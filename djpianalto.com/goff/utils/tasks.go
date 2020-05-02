@@ -46,9 +46,10 @@ func processTask(task *Task, s *discordgo.Session) {
 		e := discordgo.MessageEmbed{
 			Title:       "REMINDER",
 			Description: task.Content,
+			Timestamp:   task.CreationTime.Format(time.RFC3339),
 			Color:       color,
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: fmt.Sprintf("Created At: %v", task.CreationTime.Format(time.RFC1123)),
+				Text: "Created: ",
 			},
 		}
 		msg := discordgo.MessageSend{
