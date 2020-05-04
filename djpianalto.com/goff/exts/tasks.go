@@ -35,7 +35,7 @@ func addReminderCommand(ctx disgoman.Context, args []string) {
 		}
 		return
 	}
-	content := strings.Replace(text, r.Text, "", 1)
+	content := strings.Replace(text, r.Text+" ", "", 1)
 	query := "INSERT INTO tasks (type, content, guild_id, channel_id, user_id, trigger_time) " +
 		"VALUES ('Reminder', $1, $2, $3, $4, $5)"
 	_, err = utils.Database.Exec(query, content, ctx.Guild.ID, ctx.Channel.ID, ctx.User.ID, r.Time)
