@@ -29,6 +29,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		OwnerOnly:           false,
 		Hidden:              false,
 		RequiredPermissions: 0,
+		SanitizeEveryone:    true,
 		Invoke:              sayCommand,
 	})
 	_ = h.AddCommand(&disgoman.Command{
@@ -65,6 +66,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		OwnerOnly:           false,
 		Hidden:              false,
 		RequiredPermissions: 0,
+		SanitizeEveryone:    true,
 		Invoke:              addTagCommand,
 	})
 	_ = h.AddCommand(&disgoman.Command{
@@ -131,7 +133,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		Invoke:              kickUserCommand,
 	})
 	_ = h.AddCommand(&disgoman.Command{
-		Name:                "addGuildCommand",
+		Name:                "addGuild",
 		Aliases:             nil,
 		Description:         "Adds the current guild to the database",
 		OwnerOnly:           true,
