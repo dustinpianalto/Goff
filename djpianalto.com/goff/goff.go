@@ -70,6 +70,7 @@ func main() {
 	dg.AddHandler(handler.OnMessage)
 	dg.AddHandler(handler.StatusManager.OnReady)
 	dg.AddHandler(events.OnMessageUpdate)
+	dg.AddHandler(events.OnMessageDelete)
 
 	err = dg.Open()
 	if err != nil {
