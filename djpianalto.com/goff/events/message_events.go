@@ -59,6 +59,13 @@ func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 	if err != nil {
 		return
 	}
+	al, err := session.GuildAuditLog(msg.GuildID, "", "", 72, 100)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for log := range al.AuditLogEntries {
+		fmt.Println(log.TargetID, log.UserID, log.ID)
+	}
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("Message Deleted: %v", msg.ID),
 		Description: fmt.Sprintf("**Content:** %v\nIn Channel: %v", msg.Content, channel.Mention()),
