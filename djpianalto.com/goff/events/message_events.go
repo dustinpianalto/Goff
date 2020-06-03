@@ -8,6 +8,11 @@ import (
 )
 
 func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered from panic in OnMessageUpdate", r)
+		}
+	}()
 	if m.Author.Bot {
 		return
 	}
@@ -22,11 +27,11 @@ func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 		return
 	}
 	embed := &discordgo.MessageEmbed{
-		Title:       fmt.Sprintf("Edited Message: %v in %v", m.ID, channel.Mention()),
+		Title:       fmt.Sprintf("Edited Message: %v", m.ID),
 		Description: fmt.Sprintf("**Before:** %v\n**After:** %v", m.BeforeUpdate.Content, m.Content),
 		Color:       session.State.UserColor(m.Author.ID, channelID),
 		Footer: &discordgo.MessageEmbedFooter{
-			Text:    fmt.Sprintf("Author: %v", m.Author.String()),
+			Text:    fmt.Sprintf("Author: %v Channel: %v", m.Author.String(), channel.Mention()),
 			IconURL: m.Author.AvatarURL(""),
 		},
 	}
