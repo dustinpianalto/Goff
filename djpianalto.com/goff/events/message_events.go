@@ -28,10 +28,10 @@ func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 	}
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("Edited Message: %v", m.ID),
-		Description: fmt.Sprintf("**Before:** %v\n**After:** %v", m.BeforeUpdate.Content, m.Content),
+		Description: fmt.Sprintf("**Before:** %v\n**After:** %v\nIn Channel: %v", m.BeforeUpdate.Content, m.Content, channel.Mention()),
 		Color:       session.State.UserColor(m.Author.ID, channelID),
 		Footer: &discordgo.MessageEmbedFooter{
-			Text:    fmt.Sprintf("Author: %v Channel: %v", m.Author.String(), channel.Mention()),
+			Text:    fmt.Sprintf("Author: %v", m.Author.String()),
 			IconURL: m.Author.AvatarURL(""),
 		},
 	}
