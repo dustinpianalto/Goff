@@ -1,25 +1,30 @@
 package exts
 
 import (
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"errors"
 	"fmt"
-	"github.com/dustinpianalto/disgoman"
-	"github.com/kballard/go-shellquote"
 	"log"
 	"strings"
+
+	"djpianalto.com/goff/djpianalto.com/goff/utils"
+	"github.com/dustinpianalto/disgoman"
+	"github.com/kballard/go-shellquote"
 )
 
 func addTagCommand(ctx disgoman.Context, args []string) {
 	if len(args) >= 1 {
 		args, err := shellquote.Split(strings.Join(args, " "))
 		if err != nil {
-			ctx.ErrorChannel <- disgoman.CommandError{
-				Context: ctx,
-				Message: "",
-				Error:   err,
+			if strings.Contains(err.Error(), "Unterminated") {
+				args = strings.SplitN(strings.Join(args, " "), " ", 2)
+			} else {
+				ctx.ErrorChannel <- disgoman.CommandError{
+					Context: ctx,
+					Message: "",
+					Error:   err,
+				}
+				return
 			}
-			return
 		}
 		queryString := `SELECT tags.id, tags.tag, tags.content from tags
 		WHERE tags.guild_id = $1
