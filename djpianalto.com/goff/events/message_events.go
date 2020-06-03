@@ -6,6 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func OnMessageEdit(session *discordgo.Session, m *discordgo.MessageEdit) {
+func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 	fmt.Println(m.Content)
+	fmt.Println(m.BeforeUpdate.Content)
 }
