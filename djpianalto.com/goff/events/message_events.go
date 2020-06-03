@@ -41,7 +41,7 @@ func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("Recovered from panic in OnMessageUpdate", r)
+			fmt.Println("Recovered from panic in OnMessageDelete", r)
 		}
 	}()
 	if m.Author.Bot {
