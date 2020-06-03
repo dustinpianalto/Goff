@@ -11,10 +11,9 @@ import (
 	"github.com/kballard/go-shellquote"
 )
 
-func addTagCommand(ctx disgoman.Context, args []string) {
-	if len(args) >= 1 {
-		fmt.Println(args)
-		args, err := shellquote.Split(strings.Join(args, " "))
+func addTagCommand(ctx disgoman.Context, input []string) {
+	if len(input) >= 1 {
+		args, err := shellquote.Split(strings.Join(input, " "))
 		if err != nil {
 			if strings.Contains(err.Error(), "Unterminated") {
 				args = strings.SplitN(strings.Join(args, " "), " ", 2)
