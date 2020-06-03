@@ -3,7 +3,7 @@ module djpianalto.com/goff
 go 1.14
 
 require (
-	github.com/bwmarrin/discordgo v0.20.2
+	github.com/bwmarrin/discordgo v0.20.3-0.20200525154655-ca64123b05de
 	github.com/dustinpianalto/disgoman v0.0.9
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
 	github.com/lib/pq v1.3.0
