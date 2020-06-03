@@ -59,19 +59,26 @@ func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 	if err != nil {
 		return
 	}
-	al, err := session.GuildAuditLog(msg.GuildID, "", "", 72, 100)
+	al, err := session.GuildAuditLog(msg.GuildID, "", "", 72, 1)
 	if err != nil {
 		fmt.Println(err)
 	}
+	desc := ""
 	for _, log := range al.AuditLogEntries {
-		fmt.Println(log.TargetID, log.UserID, log.ID)
-		if log.TargetID == "377812572784820226" && log.UserID == "351794468870946827" {
-			fmt.Println(log.Changes.Key)
+		if log.TargetID == msg.Author.ID && log.Options.ChannelID == msg.ChannelID {
+			user, err := session.User(log.UserID)
+			if err == nil {
+				desc = fmt.Sprintf("**Content:** %v\nIn Channel: %v\nDeleted By: %v", msg.Content, channel.Mention(), user.Mention())
+			}
+			break
 		}
+	}
+	if desc == "" {
+		desc = fmt.Sprintf("**Content:** %v\nIn Channel: %v", msg.Content, channel.Mention())
 	}
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("Message Deleted: %v", msg.ID),
-		Description: fmt.Sprintf("**Content:** %v\nIn Channel: %v", msg.Content, channel.Mention()),
+		Description: desc,
 		Color:       session.State.UserColor(msg.Author.ID, channelID),
 		Footer: &discordgo.MessageEmbedFooter{
 			Text:    fmt.Sprintf("Author: %v", msg.Author.String()),
