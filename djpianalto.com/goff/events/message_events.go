@@ -63,8 +63,11 @@ func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	for log := range al.AuditLogEntries {
+	for _, log := range al.AuditLogEntries {
 		fmt.Println(log.TargetID, log.UserID, log.ID)
+		if log.TargetID == "377812572784820226" && log.UserID == "351794468870946827" {
+			fmt.Println(log.Changes.Key)
+		}
 	}
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("Message Deleted: %v", msg.ID),
