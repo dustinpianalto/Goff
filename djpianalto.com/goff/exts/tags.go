@@ -13,6 +13,7 @@ import (
 
 func addTagCommand(ctx disgoman.Context, args []string) {
 	if len(args) >= 1 {
+		fmt.Println(args)
 		args, err := shellquote.Split(strings.Join(args, " "))
 		if err != nil {
 			if strings.Contains(err.Error(), "Unterminated") {
