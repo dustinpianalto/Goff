@@ -44,26 +44,27 @@ func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 			fmt.Println("Recovered from panic in OnMessageDelete", r)
 		}
 	}()
-	if m.Author.Bot {
+	msg := m.BeforeDelete
+	if msg.Author.Bot {
 		return
 	}
 	var channelID string
-	row := utils.Database.QueryRow("SELECT logging_channel FROM guilds where id=$1", m.GuildID)
+	row := utils.Database.QueryRow("SELECT logging_channel FROM guilds where id=$1", msg.GuildID)
 	err := row.Scan(&channelID)
 	if err != nil || channelID == "" {
 		return
 	}
-	channel, err := session.State.Channel(m.ChannelID)
+	channel, err := session.State.Channel(msg.ChannelID)
 	if err != nil {
 		return
 	}
 	embed := &discordgo.MessageEmbed{
-		Title:       fmt.Sprintf("Message Deleted: %v", m.ID),
-		Description: fmt.Sprintf("**Content:** %v\nIn Channel: %v", m.Content, channel.Mention()),
-		Color:       session.State.UserColor(m.Author.ID, channelID),
+		Title:       fmt.Sprintf("Message Deleted: %v", msg.ID),
+		Description: fmt.Sprintf("**Content:** %v\nIn Channel: %v", msg.Content, channel.Mention()),
+		Color:       session.State.UserColor(msg.Author.ID, channelID),
 		Footer: &discordgo.MessageEmbedFooter{
-			Text:    fmt.Sprintf("Author: %v", m.Author.String()),
-			IconURL: m.Author.AvatarURL(""),
+			Text:    fmt.Sprintf("Author: %v", msg.Author.String()),
+			IconURL: msg.Author.AvatarURL(""),
 		},
 	}
 	session.ChannelMessageSendEmbed(channelID, embed)
