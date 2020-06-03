@@ -1,15 +1,19 @@
 package main
 
 import (
+	"fmt"
+
+	"djpianalto.com/goff/djpianalto.com/goff/events"
 	"djpianalto.com/goff/djpianalto.com/goff/exts"
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
-	"fmt"
 	"github.com/dustinpianalto/disgoman"
+
 	//"github.com/MikeModder/anpan"
-	"github.com/bwmarrin/discordgo"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 var (
@@ -65,6 +69,7 @@ func main() {
 
 	dg.AddHandler(handler.OnMessage)
 	dg.AddHandler(handler.StatusManager.OnReady)
+	dg.AddHandler(events.OnMessageUpdate)
 
 	err = dg.Open()
 	if err != nil {
