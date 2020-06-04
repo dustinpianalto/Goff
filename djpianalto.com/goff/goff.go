@@ -71,6 +71,8 @@ func main() {
 	dg.AddHandler(handler.StatusManager.OnReady)
 	dg.AddHandler(events.OnMessageUpdate)
 	dg.AddHandler(events.OnMessageDelete)
+	dg.AddHandler(events.OnGuildMemberAddLogging)
+	dg.AddHandler(events.OnGuildMemberRemoveLogging)
 
 	err = dg.Open()
 	if err != nil {
