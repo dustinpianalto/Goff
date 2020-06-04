@@ -2,6 +2,7 @@ package events
 
 import (
 	"fmt"
+	"log"
 
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/bwmarrin/discordgo"
@@ -10,7 +11,7 @@ import (
 func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("Recovered from panic in OnMessageUpdate", r)
+			log.Println("Recovered from panic in OnMessageUpdate", r)
 		}
 	}()
 	msg := m.BeforeUpdate
@@ -25,6 +26,7 @@ func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 	}
 	channel, err := session.State.Channel(msg.ChannelID)
 	if err != nil {
+		log.Println(err)
 		return
 	}
 	embed := &discordgo.MessageEmbed{
@@ -42,10 +44,14 @@ func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("Recovered from panic in OnMessageDelete", r)
+			log.Println("Recovered from panic in OnMessageDelete", r)
 		}
 	}()
 	msg := m.BeforeDelete
+	if msg == nil {
+		log.Printf("Message Deleted but the original message was not in my cache so we are ignoring it.\nMessage ID: %v\nGuild ID: %v\nChannel ID: %v\n", m.ID, m.GuildID, m.ChannelID)
+		return
+	}
 	if msg.Author.Bot {
 		return
 	}
@@ -57,20 +63,22 @@ func OnMessageDelete(session *discordgo.Session, m *discordgo.MessageDelete) {
 	}
 	channel, err := session.State.Channel(msg.ChannelID)
 	if err != nil {
+		log.Println(err)
 		return
 	}
+	desc := ""
 	al, err := session.GuildAuditLog(msg.GuildID, "", "", 72, 1)
 	if err != nil {
-		fmt.Println(err)
-	}
-	desc := ""
-	for _, log := range al.AuditLogEntries {
-		if log.TargetID == msg.Author.ID && log.Options.ChannelID == msg.ChannelID {
-			user, err := session.User(log.UserID)
-			if err == nil {
-				desc = fmt.Sprintf("**Content:** %v\nIn Channel: %v\nDeleted By: %v", msg.Content, channel.Mention(), user.Mention())
+		log.Println(err)
+	} else {
+		for _, log := range al.AuditLogEntries {
+			if log.TargetID == msg.Author.ID && log.Options.ChannelID == msg.ChannelID {
+				user, err := session.User(log.UserID)
+				if err == nil {
+					desc = fmt.Sprintf("**Content:** %v\nIn Channel: %v\nDeleted By: %v", msg.Content, channel.Mention(), user.Mention())
+				}
+				break
 			}
-			break
 		}
 	}
 	if desc == "" {
