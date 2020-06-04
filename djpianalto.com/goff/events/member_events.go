@@ -21,7 +21,7 @@ func OnGuildMemberAddLogging(s *discordgo.Session, member *discordgo.GuildMember
 	if err != nil || channelID == "" {
 		return
 	}
-	guild, err := s.Guild(member.GuildID)
+	guild, err := s.State.Guild(member.GuildID)
 	if err != nil {
 		log.Println(err)
 		return
@@ -77,7 +77,7 @@ func OnGuildMemberRemoveLogging(s *discordgo.Session, member *discordgo.GuildMem
 	if err != nil || channelID == "" {
 		return
 	}
-	guild, err := s.Guild(member.GuildID)
+	guild, err := s.State.Guild(member.GuildID)
 	if err != nil {
 		log.Println(err)
 		return
