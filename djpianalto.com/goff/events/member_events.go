@@ -94,12 +94,9 @@ func OnGuildMemberRemoveLogging(s *discordgo.Session, member *discordgo.GuildMem
 		URL: member.User.AvatarURL(""),
 	}
 
-	joinTime, _ := member.JoinedAt.Parse()
-	duration := utils.ParseDurationString(timeNow.Sub(joinTime))
-
 	embed := &discordgo.MessageEmbed{
 		Title:       title,
-		Description: fmt.Sprintf("%v (%v) Has Left the Server\nThey were here for %v", member.User.Mention(), member.User.ID, duration),
+		Description: fmt.Sprintf("%v (%v) Has Left the Server", member.User.Mention(), member.User.ID),
 		Color:       0xff9431,
 		Thumbnail:   thumb,
 		Footer: &discordgo.MessageEmbedFooter{
