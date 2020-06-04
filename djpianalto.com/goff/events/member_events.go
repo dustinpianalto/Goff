@@ -94,9 +94,30 @@ func OnGuildMemberRemoveLogging(s *discordgo.Session, member *discordgo.GuildMem
 		URL: member.User.AvatarURL(""),
 	}
 
+	desc := ""
+	al, err := s.GuildAuditLog(member.GuildID, "", "", 20, 1)
+	if err != nil {
+		log.Println(err)
+	} else {
+		for _, log := range al.AuditLogEntries {
+			if log.TargetID == member.User.ID {
+				user, err := s.User(log.UserID)
+				if err == nil {
+					desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, user.String(), log.Reason)
+				} else {
+					desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, log.UserID, log.Reason)
+				}
+				break
+			}
+		}
+	}
+	if desc == "" {
+		desc = fmt.Sprintf("%v (%v) Has Left the Server", member.User.String(), member.User.ID)
+	}
+
 	embed := &discordgo.MessageEmbed{
 		Title:       title,
-		Description: fmt.Sprintf("%v (%v) Has Left the Server", member.User.Mention(), member.User.ID),
+		Description: desc,
 		Color:       0xff9431,
 		Thumbnail:   thumb,
 		Footer: &discordgo.MessageEmbedFooter{
