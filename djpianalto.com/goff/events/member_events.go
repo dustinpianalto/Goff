@@ -101,13 +101,17 @@ func OnGuildMemberRemoveLogging(s *discordgo.Session, member *discordgo.GuildMem
 	} else {
 		for _, log := range al.AuditLogEntries {
 			if log.TargetID == member.User.ID {
-				user, err := s.User(log.UserID)
-				if err == nil {
-					desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, user.String(), log.Reason)
-				} else {
-					desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, log.UserID, log.Reason)
+				int64ID, _ := strconv.ParseInt(member.User.ID, 10, 64)
+				logSnow := utils.ParseSnowflake(int64ID)
+				if timeNow.Sub(logSnow.CreationTime).Seconds() <= 10 {
+					user, err := s.User(log.UserID)
+					if err == nil {
+						desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, user.String(), log.Reason)
+					} else {
+						desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, log.UserID, log.Reason)
+					}
+					break
 				}
-				break
 			}
 		}
 	}
