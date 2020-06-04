@@ -103,7 +103,7 @@ func OnGuildMemberRemoveLogging(s *discordgo.Session, member *discordgo.GuildMem
 			if log.TargetID == member.User.ID {
 				int64ID, _ := strconv.ParseInt(log.ID, 10, 64)
 				logSnow := utils.ParseSnowflake(int64ID)
-				if timeNow.Sub(logSnow.CreationTime).Seconds() <= 10 || logSnow.CreationTime.Sub(timeNow).Seconds() <= 10 {
+				if timeNow.Sub(logSnow.CreationTime).Seconds() <= 10 {
 					user, err := s.User(log.UserID)
 					if err == nil {
 						desc = fmt.Sprintf("%v (%v) was Kicked by: %v\nReason: %v", member.User.String(), member.User.ID, user.String(), log.Reason)
