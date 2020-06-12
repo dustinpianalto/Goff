@@ -24,7 +24,7 @@ func interleave(ctx disgoman.Context, args []string) {
 			z |= x_masked_i << i
 			z |= y_masked_i << (i + 1)
 		}
-		ctx.Send(string(z))
+		ctx.Send(fmt.Sprintf("%v", z))
 	}
 }
 
