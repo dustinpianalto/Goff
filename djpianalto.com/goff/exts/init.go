@@ -168,4 +168,22 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              addReminderCommand,
 	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "encode",
+		Aliases:             []string{"e"},
+		Description:         "Encode 2 numbers",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              interleave,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "decode",
+		Aliases:             []string{"d"},
+		Description:         "Decode 1 number into 2",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              deinterleave,
+	})
 }
