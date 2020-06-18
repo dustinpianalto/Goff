@@ -118,7 +118,12 @@ func userCommand(ctx disgoman.Context, args []string) {
 	for _, role := range roles {
 		roleMentions = append(roleMentions, role.Mention())
 	}
-	rolesString := strings.Join(roleMentions, " ")
+	var rolesString string
+	if len(roleMentions) > 0 {
+		rolesString = strings.Join(roleMentions, " ")
+	} else {
+		rolesString = "None"
+	}
 
 	rolesField := &discordgo.MessageEmbedField{
 		Name:   "Roles:",
