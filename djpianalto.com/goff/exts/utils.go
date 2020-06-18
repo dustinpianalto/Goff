@@ -144,7 +144,7 @@ func userCommand(ctx disgoman.Context, args []string) {
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("%v#%v  %v", member.User.Username, member.User.Discriminator, botString),
 		Description: fmt.Sprintf("**%v** (%v)", member.Nick, member.User.ID),
-		Color:       0,
+		Color:       ctx.Session.State.UserColor(member.User.ID, ctx.Channel.ID),
 		Thumbnail:   thumb,
 		Fields: []*discordgo.MessageEmbedField{
 			guildJoinedField,
