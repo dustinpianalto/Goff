@@ -19,10 +19,25 @@ type Task struct {
 }
 
 func processTask(task *Task, s *discordgo.Session) {
+	query := "SELECT completed, processing from tasks where id = $1"
+	res, err := Database.Query(query, task.ID)
+	if err != nil {
+		log.Println(err)
+	}
+	var completed bool
+	var processing bool
+	err = res.Scan(&completed, &processing)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	if completed || processing {
+		return
+	}
 	closeQuery := "Update tasks set completed = true where id = $1"
 	processQuery := "UPDATE tasks SET processing = true WHERE id = $1"
 	defer Database.Exec(closeQuery, task.ID)
-	_, err := Database.Exec(processQuery, task.ID)
+	_, err = Database.Exec(processQuery, task.ID)
 	if err != nil {
 		log.Println(err)
 		return
@@ -67,6 +82,12 @@ func processTask(task *Task, s *discordgo.Session) {
 			log.Println(err)
 		}
 	}
+	processQuery = "UPDATE tasks SET processing = false WHERE id = $1"
+	_, err = Database.Exec(processQuery, task.ID)
+	if err != nil {
+		log.Println(err)
+	}
+
 }
 
 func getTasksToRun() []Task {
