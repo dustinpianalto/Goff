@@ -26,6 +26,7 @@ func processTask(task *Task, s *discordgo.Session) {
 	}
 	var completed bool
 	var processing bool
+	res.Next()
 	err = res.Scan(&completed, &processing)
 	if err != nil {
 		log.Println(err)
