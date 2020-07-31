@@ -23,6 +23,7 @@ func processTask(task *Task, s *discordgo.Session) {
 	res, err := Database.Query(query, task.ID)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	var completed bool
 	var processing bool
