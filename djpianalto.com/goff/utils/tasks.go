@@ -83,6 +83,11 @@ func getTasksToRun() []Task {
 		if err != nil {
 			log.Println(err)
 		}
+		for _, task := range tasks {
+			if task.ID == t.ID {
+				continue
+			}
+		}
 		tasks = append(tasks, t)
 	}
 
