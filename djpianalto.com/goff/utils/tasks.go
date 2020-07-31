@@ -22,7 +22,11 @@ func processTask(task *Task, s *discordgo.Session) {
 	closeQuery := "Update tasks set completed = true where id = $1"
 	processQuery := "UPDATE tasks SET processing = true WHERE id = $1"
 	defer Database.Exec(closeQuery, task.ID)
-	Database.Exec(processQuery, task.ID)
+	_, err := Database.Exec(processQuery, task.ID)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 	log.Println(fmt.Sprintf("Processing task %v", task.ID))
 	guild, err := s.Guild(task.GuildID)
 	if err != nil {
@@ -73,22 +77,6 @@ func getTasksToRun() []Task {
 		log.Println(err)
 	}
 	var tasks []Task
-	for res.Next() {
-		var t Task
-		err = res.Scan(&t.ID, &t.Type, &t.Content, &t.GuildID, &t.ChannelID, &t.UserID, &t.CreationTime, &t.TriggerTime)
-		if err != nil {
-			log.Println(err)
-		}
-		tasks = append(tasks, t)
-	}
-
-	// get tasks that have been processing for more than 10 seconds
-	query = "SELECT id, type, content, guild_id, channel_id, user_id, creation_time, trigger_time " +
-		"from tasks where completed is false and processing is true and trigger_time < $1"
-	res, err = Database.Query(query, time.Now().Add(-time.Second*10))
-	if err != nil {
-		log.Println(err)
-	}
 	for res.Next() {
 		var t Task
 		err = res.Scan(&t.ID, &t.Type, &t.Content, &t.GuildID, &t.ChannelID, &t.UserID, &t.CreationTime, &t.TriggerTime)
