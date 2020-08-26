@@ -197,7 +197,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	})
 	_ = h.AddCommand(&disgoman.Command{
 		Name:                "ParseRPN",
-		Aliases:             []string{"PRPN"},
+		Aliases:             []string{"PRPN", "prpn"},
 		Description:         "Parse RPN string and return the result",
 		OwnerOnly:           false,
 		Hidden:              false,
