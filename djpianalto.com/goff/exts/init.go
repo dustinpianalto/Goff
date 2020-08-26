@@ -206,7 +206,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	})
 	_ = h.AddCommand(&disgoman.Command{
 		Name:                "solve",
-		Aliases:             []string{"math"},
+		Aliases:             []string{"math", "infix"},
 		Description:         "Solve infix equation and return the result",
 		OwnerOnly:           false,
 		Hidden:              false,
