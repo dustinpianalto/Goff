@@ -187,12 +187,31 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		Invoke:              deinterleave,
 	})
 	_ = h.AddCommand(&disgoman.Command{
-		Name:                "rpn",
-		Aliases:             []string{},
+		Name:                "RPN",
+		Aliases:             []string{"rpn"},
 		Description:         "Convert infix to rpn",
 		OwnerOnly:           false,
 		Hidden:              false,
 		RequiredPermissions: 0,
-		Invoke:              rpn,
+		Invoke:              generateRPNCommand,
 	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "ParseRPN",
+		Aliases:             []string{'PRPN'},
+		Description:         "Parse RPN string and return the result",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              parseRPNCommand,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "solve",
+		Aliases:             []string{"math"},
+		Description:         "Solve infix equation and return the result",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              solveCommand,
+	})
+
 }

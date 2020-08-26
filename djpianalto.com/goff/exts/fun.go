@@ -3,6 +3,7 @@ package exts
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/dustinpianalto/disgoman"
@@ -50,10 +51,34 @@ func deinterleave(ctx disgoman.Context, args []string) {
 	}
 }
 
-func rpn(ctx disgoman.Context, args []string) {
+func generateRPNCommand(ctx disgoman.Context, args []string) {
 	rpn, err := utils.GenerateRPN(args)
 	if err != nil {
 		ctx.Send(err.Error())
+		return
 	}
 	ctx.Send(rpn)
+}
+
+func parseRPNCommand(ctx disgoman.Context, args []string) {
+	res, err := utils.ParseRPN(args)
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	ctx.Send(fmt.Sprintf("The result is: %v", res))
+}
+
+func solveCommand(ctx disgoman.Context, args []string) {
+	rpn, err := utils.GenerateRPN(args)
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	res, err := utils.ParseRPN(strings.Split(rpn, " "))
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	ctx.Send(fmt.Sprintf("The result is: %v", res))
 }
