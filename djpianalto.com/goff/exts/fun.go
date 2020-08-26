@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/rpnparse"
 )
 
 func interleave(ctx disgoman.Context, args []string) {
@@ -52,7 +52,7 @@ func deinterleave(ctx disgoman.Context, args []string) {
 }
 
 func generateRPNCommand(ctx disgoman.Context, args []string) {
-	rpn, err := utils.GenerateRPN(args)
+	rpn, err := rpnparse.GenerateRPN(args)
 	if err != nil {
 		ctx.Send(err.Error())
 		return
@@ -61,7 +61,7 @@ func generateRPNCommand(ctx disgoman.Context, args []string) {
 }
 
 func parseRPNCommand(ctx disgoman.Context, args []string) {
-	res, err := utils.ParseRPN(args)
+	res, err := rpnparse.ParseRPN(args)
 	if err != nil {
 		ctx.Send(err.Error())
 		return
@@ -70,12 +70,12 @@ func parseRPNCommand(ctx disgoman.Context, args []string) {
 }
 
 func solveCommand(ctx disgoman.Context, args []string) {
-	rpn, err := utils.GenerateRPN(args)
+	rpn, err := rpnparse.GenerateRPN(args)
 	if err != nil {
 		ctx.Send(err.Error())
 		return
 	}
-	res, err := utils.ParseRPN(strings.Split(rpn, " "))
+	res, err := rpnparse.ParseRPN(strings.Split(rpn, " "))
 	if err != nil {
 		ctx.Send(err.Error())
 		return
