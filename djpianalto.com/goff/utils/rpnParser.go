@@ -7,17 +7,17 @@ import (
 	"strconv"
 )
 
-type Stack []float64
+type FStack []float64
 
-func (s *Stack) IsEmpty() bool {
+func (s *FStack) IsEmpty() bool {
 	return len(*s) == 0
 }
 
-func (s *Stack) Push(op float64) {
+func (s *FStack) Push(op float64) {
 	*s = append(*s, op)
 }
 
-func (s *Stack) Pop() (float64, bool) {
+func (s *FStack) Pop() (float64, bool) {
 	if s.IsEmpty() {
 		return 0, false
 	}
@@ -27,7 +27,7 @@ func (s *Stack) Pop() (float64, bool) {
 	return element, true
 }
 
-func (s *Stack) PopTwo() (float64, float64, bool) {
+func (s *FStack) PopTwo() (float64, float64, bool) {
 	if s.IsEmpty() || len(*s) < 2 {
 		return 0, 0, false
 	}
@@ -39,7 +39,7 @@ func (s *Stack) PopTwo() (float64, float64, bool) {
 
 }
 
-func (s *Stack) Top() float64 {
+func (s *FStack) Top() float64 {
 	if s.IsEmpty() {
 		return 0
 	}
@@ -47,7 +47,7 @@ func (s *Stack) Top() float64 {
 }
 
 func ParseRPN(args []string) (float64, error) {
-	s := Stack{}
+	s := FStack{}
 	for _, token := range args {
 		switch token {
 		case "+":
