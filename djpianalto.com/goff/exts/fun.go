@@ -2,8 +2,10 @@ package exts
 
 import (
 	"fmt"
-	"github.com/dustinpianalto/disgoman"
 	"strconv"
+
+	"djpianalto.com/goff/djpianalto.com/goff/utils"
+	"github.com/dustinpianalto/disgoman"
 )
 
 func interleave(ctx disgoman.Context, args []string) {
@@ -46,4 +48,12 @@ func deinterleave(ctx disgoman.Context, args []string) {
 		}
 		ctx.Send(fmt.Sprintf("(%v, %v)", x, y))
 	}
+}
+
+func rpn(ctx disgoman.Context, args []string) {
+	rpn, err := utils.GenerateRPN(args)
+	if err != nil {
+		ctx.Send(err.Error())
+	}
+	ctx.Send(rpn)
 }

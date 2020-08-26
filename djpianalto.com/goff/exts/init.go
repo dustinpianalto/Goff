@@ -186,4 +186,13 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              deinterleave,
 	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "rpn",
+		Aliases:             []string{"d"},
+		Description:         "Convert infix to rpn",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              rpn,
+	})
 }
