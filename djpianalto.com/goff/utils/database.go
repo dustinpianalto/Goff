@@ -3,6 +3,7 @@ package utils
 import (
 	"database/sql"
 	"fmt"
+
 	_ "github.com/lib/pq"
 )
 
@@ -84,7 +85,8 @@ func InitializeDatabase() {
 		"user_id varchar(30) not null," +
 		"creation_time timestamp not null default NOW()," +
 		"trigger_time timestamp not null," +
-		"completed bool not null default false)")
+		"completed bool not null default false," +
+		"processing bool default false)")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -103,7 +105,7 @@ func LoadTestData() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("INSERT INTO prefixes (prefix) VALUES ('Go.'), ('go.'), ('go,')")
+	_, err = Database.Query("INSERT INTO prefixes (prefix) VALUES ('Godev.'), ('godev.'), ('godev,')")
 	if err != nil {
 		fmt.Println(err)
 	}

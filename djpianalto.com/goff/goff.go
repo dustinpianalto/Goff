@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"djpianalto.com/goff/djpianalto.com/goff/events"
 	"djpianalto.com/goff/djpianalto.com/goff/exts"
@@ -101,8 +102,24 @@ func main() {
 	}
 }
 
-func getPrefixes(guild_id string) []string {
-	return []string{"Go.", "go."}
+func getPrefixes(guildID string) []string {
+	queryString := "Select prefix from prefixes p, x_guilds_prefixes xgp where xgp.guild_id = $1 and xgp.prefix_id = p.id"
+	rows, err := utils.Database.Query(queryString, guildID)
+	if err != nil {
+		log.Println(err)
+		return []string{"Go.", "go."}
+	}
+	var prefixes []string
+	for rows.Next() {
+		var prefix string
+		err = rows.Scan(&prefix)
+		if err != nil {
+			log.Println(err)
+			return []string{"Go.", "go."}
+		}
+		prefixes = append(prefixes, prefix)
+	}
+	return prefixes
 }
 
 func ErrorHandler(ErrorChan chan disgoman.CommandError) {
