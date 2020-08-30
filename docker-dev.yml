@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+#  goff-db:
+#    image: postgres
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - "${PWD}/postgres.conf:/etc/postgresql/postgresql.conf"
+#      - "goff-db:/var/lib/postgresql/data:rw"
+#    env_file: ${PWD}/.env
+
+  goff:
+    build:
+      context: .
+      dockerfile: "${PWD}/Dockerfile"
+    env_file: ${PWD}/.env
+#    logging:
+#      driver: awslogs
+#      options:
+#        awslogs-region: us-east-1
+#        awslogs-group: "/docker/goff/production"
+#    depends_on:
+#      - goff-db
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable
+#    links:
+#      - goff-db:goff.db
+
+#volumes:
+#  goff-db:
+#    external: true
