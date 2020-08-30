@@ -1,13 +1,20 @@
-FROM golang:1.14-alpine
+FROM golang:1.14-alpine as dev
 
 WORKDIR /go/src/Goff
 COPY ./go.mod .
+COPY ./go.sum .
 
-RUN apk add --no-cache git
-
-RUN go get -d -v ./...
+RUN go mod download
 
 COPY . .
-RUN go install -v ./...
+RUN go install github.com/dustinpianalto/goff
 
-ENTRYPOINT /go/bin/goff
+CMD [ "go", "run", "goff.go"]
+
+from alpine
+
+WORKDIR /bin
+
+COPY --from=dev /go/bin/goff ./goff
+
+CMD [ "goff" ]
