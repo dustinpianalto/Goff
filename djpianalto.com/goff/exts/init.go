@@ -204,4 +204,30 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: disgoman.PermissionManageServer,
 		Invoke:              getPuzzleChannel,
 	})
+		Name:                "RPN",
+		Aliases:             []string{"rpn"},
+		Description:         "Convert infix to rpn",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              generateRPNCommand,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "ParseRPN",
+		Aliases:             []string{"PRPN", "prpn"},
+		Description:         "Parse RPN string and return the result",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              parseRPNCommand,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "solve",
+		Aliases:             []string{"math", "infix"},
+		Description:         "Solve infix equation and return the result",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              solveCommand,
+	})
 }

@@ -2,8 +2,11 @@ package exts
 
 import (
 	"fmt"
-	"github.com/dustinpianalto/disgoman"
 	"strconv"
+	"strings"
+
+	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/rpnparse"
 )
 
 func interleave(ctx disgoman.Context, args []string) {
@@ -46,4 +49,36 @@ func deinterleave(ctx disgoman.Context, args []string) {
 		}
 		ctx.Send(fmt.Sprintf("(%v, %v)", x, y))
 	}
+}
+
+func generateRPNCommand(ctx disgoman.Context, args []string) {
+	rpn, err := rpnparse.GenerateRPN(args)
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	ctx.Send(rpn)
+}
+
+func parseRPNCommand(ctx disgoman.Context, args []string) {
+	res, err := rpnparse.ParseRPN(args)
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	ctx.Send(fmt.Sprintf("The result is: %v", res))
+}
+
+func solveCommand(ctx disgoman.Context, args []string) {
+	rpn, err := rpnparse.GenerateRPN(args)
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	res, err := rpnparse.ParseRPN(strings.Split(rpn, " "))
+	if err != nil {
+		ctx.Send(err.Error())
+		return
+	}
+	ctx.Send(fmt.Sprintf("The result is: %v", res))
 }
