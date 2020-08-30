@@ -3,6 +3,7 @@ package utils
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -90,6 +91,28 @@ func InitializeDatabase() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	_, err = Database.Query(`CREATE TABLE IF NOT EXISTS postfixes(
+		id serial primary key,
+		name varchar(100) not null,
+		time timestamp not null default NOW())`)
+	if err != nil {
+		log.Println(err)
+	}
+	_, err = Database.Exec(`CREATE TABLE IF NOT EXISTS puzzles(
+		id serial primary key,
+		text text not null,
+		time timestamp not null
+		)`)
+	if err != nil {
+		log.Println(err)
+	}
+	_, err = Database.Exec(`CREATE TABLE IF NOT EXISTS x_guilds_puzzles(
+		id serial primary key,
+		guild_id varchar(30) not null references guilds(id),
+		puzzle_id int not null references puzzles(id),
+		message_id varchar(30) not null
+		)`)
+	RunPostfixes()
 }
 
 func LoadTestData() {

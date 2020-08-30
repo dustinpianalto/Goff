@@ -90,7 +90,7 @@ func main() {
 	// Start the task handler in a goroutine
 	go utils.ProcessTasks(dg, 1)
 
-	go utils.RecieveEmail()
+	go utils.RecieveEmail(dg)
 
 	fmt.Println("The Bot is now running.")
 	sc := make(chan os.Signal, 1)

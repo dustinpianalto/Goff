@@ -2,24 +2,32 @@ package utils
 
 import (
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
+	"strings"
+	"sync"
 	"time"
 
+	"github.com/bwmarrin/discordgo"
 	imap "github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
 	"github.com/emersion/go-message/mail"
 )
 
+const ()
+
 var (
 	emailUsername = os.Getenv("GOFF_EMAIL_USERNAME")
 	emailPassword = os.Getenv("GOFF_EMAIL_PASSWORD")
+	puzzleAddress = mail.Address{
+		Name:    "Daily Coding Problem",
+		Address: "founders@dailycodingproblem.com",
+	}
 )
 
 var EmailClient client.Client
 
-func RecieveEmail() {
+func RecieveEmail(dg *discordgo.Session) {
 	for {
 		log.Println("Connecting to Email server.")
 
@@ -33,7 +41,6 @@ func RecieveEmail() {
 			return
 		}
 		log.Println("Connected to Email server.")
-		defer EmailClient.Logout()
 
 		mbox, err := EmailClient.Select("INBOX", false)
 		if err != nil {
@@ -64,6 +71,8 @@ func RecieveEmail() {
 				}
 			}()
 
+			var wg sync.WaitGroup
+
 			for msg := range messages {
 				if msg == nil {
 					log.Println("No New Messages")
@@ -74,46 +83,50 @@ func RecieveEmail() {
 					log.Println("Server didn't send a message body")
 					continue
 				}
-				mr, err := mail.CreateReader(r)
-				if err != nil {
-					log.Println(err)
-					continue
-				}
-				header := mr.Header
-				if date, err := header.Date(); err == nil {
-					log.Println("Date:", date)
-				}
-				if from, err := header.AddressList("From"); err == nil {
-					log.Println("From:", from)
-				}
-				if to, err := header.AddressList("To"); err == nil {
-					log.Println("To:", to)
-				}
-				if subject, err := header.Subject(); err == nil {
-					log.Println("Subject:", subject)
-				}
-				for {
-					p, err := mr.NextPart()
-					if err == io.EOF {
-						break
-					} else if err != nil {
-						log.Println(err)
-						break
-					}
-
-					switch h := p.Header.(type) {
-					case *mail.InlineHeader:
-						// This is the message's text (can be plain-text or HTML)
-						b, _ := ioutil.ReadAll(p.Body)
-						log.Printf("Got text: %v\n", string(b))
-					case *mail.AttachmentHeader:
-						// This is an attachment
-						filename, _ := h.Filename()
-						log.Printf("Got attachment: %v\n", filename)
-					}
-				}
+				wg.Add(1)
+				go processEmail(r, dg, &wg)
 			}
+			wg.Wait()
 		}
+
+		EmailClient.Logout()
 		time.Sleep(300 * time.Second)
 	}
+}
+
+func processEmail(r io.Reader, dg *discordgo.Session, wg *sync.WaitGroup) {
+	defer wg.Done()
+	mr, err := mail.CreateReader(r)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	header := mr.Header
+	from, err := header.AddressList("From")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	subject, err := header.Subject()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Println(from)
+	log.Println(subject)
+	if addressIn(from, puzzleAddress) &&
+		strings.Contains(subject, "Daily Coding Problem:") {
+		log.Println("Processing Puzzle")
+		ProcessPuzzleEmail(mr, dg)
+	}
+
+}
+
+func addressIn(s []*mail.Address, a mail.Address) bool {
+	for _, item := range s {
+		if item.String() == a.String() {
+			return true
+		}
+	}
+	return false
 }

@@ -186,4 +186,22 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: 0,
 		Invoke:              deinterleave,
 	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "set-puzzle-channel",
+		Aliases:             []string{"spc"},
+		Description:         "Set the channel puzzle messages will be sent to.",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              puzzleChannel,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "get-puzzle-channel",
+		Aliases:             []string{"gpc"},
+		Description:         "Gets the channel puzzle messages will be sent to.",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              getPuzzleChannel,
+	})
 }
