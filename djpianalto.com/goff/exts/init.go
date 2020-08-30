@@ -204,6 +204,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		RequiredPermissions: disgoman.PermissionManageServer,
 		Invoke:              getPuzzleChannel,
 	})
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "RPN",
 		Aliases:             []string{"rpn"},
 		Description:         "Convert infix to rpn",
