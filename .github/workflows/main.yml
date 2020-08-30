@@ -8,7 +8,7 @@ on:
       - master
       - development
     tags: 
-      - v[]+.[]+.[-0-9a-fA-F]+
+      - v[0-9]+.[0-9]+.[-0-9a-fA-F]+
 
 jobs:
   build:
