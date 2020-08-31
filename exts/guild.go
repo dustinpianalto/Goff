@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff/utils"
 )
 
 // Guild management commands

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"djpianalto.com/goff/djpianalto.com/goff/events"
-	"djpianalto.com/goff/djpianalto.com/goff/exts"
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff/events"
+	"github.com/dustinpianalto/goff/exts"
+	"github.com/dustinpianalto/goff/utils"
 
 	//"github.com/MikeModder/anpan"
 	"os"

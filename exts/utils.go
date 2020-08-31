@@ -1,14 +1,15 @@
 package exts
 
 import (
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
-	"github.com/dustinpianalto/disgoman"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff/utils"
 )
 
 func pingCommand(ctx disgoman.Context, _ []string) {

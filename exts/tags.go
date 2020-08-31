@@ -6,8 +6,8 @@ import (
 	"log"
 	"strings"
 
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff/utils"
 	"github.com/kballard/go-shellquote"
 )
 

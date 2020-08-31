@@ -1,13 +1,14 @@
 package exts
 
 import (
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"errors"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
-	"github.com/dustinpianalto/disgoman"
 	"strings"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff/utils"
 )
 
 func kickUserCommand(ctx disgoman.Context, args []string) {

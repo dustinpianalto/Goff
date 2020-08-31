@@ -1,12 +1,13 @@
 package events
 
 import (
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/dustinpianalto/goff/utils"
 )
 
 func OnGuildMemberAddLogging(s *discordgo.Session, member *discordgo.GuildMemberAdd) {

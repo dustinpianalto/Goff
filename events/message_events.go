@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"github.com/bwmarrin/discordgo"
+	"github.com/dustinpianalto/goff/utils"
 )
 
 func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {

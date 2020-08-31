@@ -1,15 +1,16 @@
 package exts
 
 import (
-	"djpianalto.com/goff/djpianalto.com/goff/utils"
 	"errors"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff/utils"
 	"github.com/olebedev/when"
 	"github.com/olebedev/when/rules/common"
 	"github.com/olebedev/when/rules/en"
-	"strings"
-	"time"
 )
 
 func addReminderCommand(ctx disgoman.Context, args []string) {
