@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development'
+    if: endsWith(github.ref, 'master') || endsWith(github.ref, 'development')
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
