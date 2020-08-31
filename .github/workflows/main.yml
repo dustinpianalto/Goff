@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    if: ${GITHUB_REF##*/} == 'refs/heads/master' || ${GITHUB_REF##*/} == 'refs/heads/development'
+    if: github.event.base_ref == 'refs/heads/master' || github.event.base_ref == 'refs/heads/development'
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -28,8 +28,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          repositories: goff
       
       - name: Get Version
         id: get_version
