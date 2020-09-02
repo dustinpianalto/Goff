@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/bwmarrin/discordgo v0.20.3-0.20200525154655-ca64123b05de
-	github.com/dustinpianalto/disgoman v0.0.10
+	github.com/dustinpianalto/disgoman v0.0.12
 	github.com/dustinpianalto/rpnparse v1.0.1
 	github.com/emersion/go-imap v1.0.5
 	github.com/emersion/go-message v0.12.0
