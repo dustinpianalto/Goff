@@ -16,6 +16,10 @@ var postfixes = []postfix{
 		Name:   "1_Update_X_Guild_Prefixes_to_add_ID",
 		Invoke: updateXGuildPrefixesToAddID,
 	},
+	postfix{
+		Name:   "1_Update_Tags_Content_Length",
+		Invoke: updateTagsContentLength,
+	},
 }
 
 func RunPostfixes() {
@@ -67,6 +71,23 @@ func updateXGuildPrefixesToAddID(revert bool) error {
 	} else {
 		queryString = `ALTER TABLE x_guilds_prefixes
 		DROP COLUMN id`
+	}
+	_, err := Database.Exec(queryString)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func updateTagsContentLength(revert bool) error {
+	var queryString string
+	if !revert {
+		queryString = `ALTER TABLE tags
+		ALTER COLUMN content TYPE varchar(2000)`
+	} else {
+		queryString = `ALTER TABLE tags
+		ALTER COLUMN content TYPE varchar(1000)`
 	}
 	_, err := Database.Exec(queryString)
 	if err != nil {

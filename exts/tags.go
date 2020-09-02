@@ -8,31 +8,17 @@ import (
 
 	"github.com/dustinpianalto/disgoman"
 	"github.com/dustinpianalto/goff/utils"
-	"github.com/kballard/go-shellquote"
 )
 
 func addTagCommand(ctx disgoman.Context, input []string) {
 	if len(input) >= 1 {
-		args, err := shellquote.Split(strings.Join(input, " "))
-		if err != nil {
-			if strings.Contains(err.Error(), "Unterminated") {
-				args = strings.SplitN(strings.Join(args, " "), " ", 2)
-			} else {
-				ctx.ErrorChannel <- disgoman.CommandError{
-					Context: ctx,
-					Message: "",
-					Error:   err,
-				}
-				return
-			}
-		}
 		queryString := `SELECT tags.id, tags.tag, tags.content from tags
 		WHERE tags.guild_id = $1
 		AND tags.tag = $2;`
-		row := utils.Database.QueryRow(queryString, ctx.Guild.ID, args[0])
+		row := utils.Database.QueryRow(queryString, ctx.Guild.ID, input[0])
 		var dest string
 		if err := row.Scan(&dest); err != nil {
-			tag := args[0]
+			tag := input[0]
 			if tag == "" {
 				ctx.ErrorChannel <- disgoman.CommandError{
 					Context: ctx,
@@ -41,7 +27,7 @@ func addTagCommand(ctx disgoman.Context, input []string) {
 				}
 				return
 			}
-			if len(args) <= 1 {
+			if len(input) <= 1 {
 				ctx.ErrorChannel <- disgoman.CommandError{
 					Context: ctx,
 					Message: "I got a name but no value",
@@ -49,7 +35,7 @@ func addTagCommand(ctx disgoman.Context, input []string) {
 				}
 				return
 			}
-			value := args[1]
+			value := strings.Join(input[1:], " ")
 			if value == "" {
 				ctx.ErrorChannel <- disgoman.CommandError{
 					Context: ctx,
@@ -61,7 +47,6 @@ func addTagCommand(ctx disgoman.Context, input []string) {
 			queryString = `INSERT INTO tags (tag, content, creator, guild_id) VALUES ($1, $2, $3, $4);`
 			_, err := utils.Database.Exec(queryString, tag, value, ctx.Message.Author.ID, ctx.Guild.ID)
 			if err != nil {
-				ctx.Send(err.Error())
 				ctx.ErrorChannel <- disgoman.CommandError{
 					Context: ctx,
 					Message: "",
