@@ -34,6 +34,11 @@ func main() {
 		return
 	}
 	dg.State.MaxMessageCount = 100
+	dg.StateEnabled = true
+
+	dg.Identify = discordgo.Identify{
+		Intents: discordgo.MakeIntent(discordgo.IntentsAll),
+	}
 
 	utils.ConnectDatabase(os.Getenv("DATABASE_URL"))
 	utils.InitializeDatabase()

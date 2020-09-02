@@ -3,7 +3,7 @@ module github.com/dustinpianalto/goff
 go 1.14
 
 require (
-	github.com/bwmarrin/discordgo v0.20.3-0.20200525154655-ca64123b05de
+	github.com/bwmarrin/discordgo v0.22.0
 	github.com/dustinpianalto/disgoman v0.0.12
 	github.com/dustinpianalto/rpnparse v1.0.1
 	github.com/emersion/go-imap v1.0.5

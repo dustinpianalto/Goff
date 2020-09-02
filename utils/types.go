@@ -1,5 +1,7 @@
 package utils
 
+import "database/sql"
+
 type Guild struct {
 	ID             string
 	WelcomeMessage string
@@ -7,4 +9,5 @@ type Guild struct {
 	LoggingChannel string
 	WelcomeChannel string
 	PuzzleChannel  string
+	PuzzleRole     sql.NullString
 }
