@@ -205,6 +205,24 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		Invoke:              getPuzzleChannel,
 	})
 	_ = h.AddCommand(&disgoman.Command{
+		Name:                "set-puzzle-role",
+		Aliases:             []string{"spr"},
+		Description:         "Set the role to be pinged when there is a new puzzle",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              puzzleRole,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "get-puzzle-role",
+		Aliases:             []string{"gpr"},
+		Description:         "Get the role that will be pinged when there is a new puzzle",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              getPuzzleRole,
+	})
+	_ = h.AddCommand(&disgoman.Command{
 		Name:                "RPN",
 		Aliases:             []string{"rpn"},
 		Description:         "Convert infix to rpn",
@@ -230,5 +248,41 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 		Hidden:              false,
 		RequiredPermissions: 0,
 		Invoke:              solveCommand,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "make-role-self-assignable",
+		Aliases:             []string{"makesar"},
+		Description:         "Makes the passed in role self assignable by anyone",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              makeRoleSelfAssignable,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "remove-self-assignable-role",
+		Aliases:             []string{"removesar"},
+		Description:         "Makes a role that was previously self assignable not so",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: disgoman.PermissionManageServer,
+		Invoke:              removeSelfAssignableRole,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "giverole",
+		Aliases:             []string{"iwant", "givetome"},
+		Description:         "Assigns a person the passed in role if it is self assignable",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              selfAssignRole,
+	})
+	_ = h.AddCommand(&disgoman.Command{
+		Name:                "removerole",
+		Aliases:             []string{"idon'twant"},
+		Description:         "Removes a role from a person if the role is self assignable",
+		OwnerOnly:           false,
+		Hidden:              false,
+		RequiredPermissions: 0,
+		Invoke:              unAssignRole,
 	})
 }

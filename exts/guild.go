@@ -1,6 +1,7 @@
 package exts
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 
@@ -286,5 +287,90 @@ func getPuzzleChannel(ctx disgoman.Context, _ []string) {
 		return
 	}
 	_, _ = ctx.Send(fmt.Sprintf("The puzzle channel is currently %s", channel.Mention()))
+	return
+}
+
+func puzzleRole(ctx disgoman.Context, args []string) {
+	var idString string
+	if len(args) > 0 {
+		idString = args[0]
+		if strings.HasPrefix(idString, "<@&") && strings.HasSuffix(idString, ">") {
+			idString = idString[3 : len(idString)-1]
+		}
+	} else {
+		idString = ""
+	}
+	fmt.Println(idString)
+	if idString == "" {
+		_, err := utils.Database.Exec("UPDATE guilds SET puzzle_role=NULL WHERE id=$1;", ctx.Guild.ID)
+		if err != nil {
+			ctx.ErrorChannel <- disgoman.CommandError{
+				Context: ctx,
+				Message: "Error Updating Database",
+				Error:   err,
+			}
+			return
+		}
+		_, _ = ctx.Send("Puzzle Role Cleared.")
+		return
+	}
+	role, err := ctx.Session.State.Role(ctx.Guild.ID, idString)
+	if err != nil {
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Can't find that Role.",
+			Error:   err,
+		}
+		return
+	}
+	_, err = utils.Database.Exec("INSERT INTO roles (id, guild_id) VALUES ($1, $2) ON CONFLICT DO NOTHING", role.ID, ctx.Guild.ID)
+	if err != nil {
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Error Updating Database",
+			Error:   err,
+		}
+		return
+	}
+	_, err = utils.Database.Exec("UPDATE guilds SET puzzle_role=$1 WHERE id=$2;", role.ID, ctx.Guild.ID)
+	if err != nil {
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Error Updating Database",
+			Error:   err,
+		}
+		return
+	}
+	_, _ = ctx.Send("Puzzle Role Updated.")
+}
+
+func getPuzzleRole(ctx disgoman.Context, _ []string) {
+	var roleID sql.NullString
+	row := utils.Database.QueryRow("SELECT puzzle_role FROM guilds where id=$1", ctx.Guild.ID)
+	err := row.Scan(&roleID)
+	if err != nil {
+		fmt.Println(err)
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Error getting data from the database.",
+			Error:   err,
+		}
+		return
+	}
+	if !roleID.Valid {
+		_, _ = ctx.Send("The puzzle role is not set.")
+		return
+	}
+	role, err := ctx.Session.State.Role(ctx.Guild.ID, roleID.String)
+	if err != nil {
+		fmt.Println(err)
+		ctx.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "I got the role ID but it does not appear to be a valid role in this guild.",
+			Error:   err,
+		}
+		return
+	}
+	_, _ = ctx.Send(fmt.Sprintf("The puzzle role is currently %s", role.Mention()))
 	return
 }

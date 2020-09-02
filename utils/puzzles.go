@@ -49,14 +49,14 @@ func ProcessPuzzleEmail(mr *mail.Reader, dg *discordgo.Session) {
 			},
 		}
 		var guilds []Guild
-		queryString := `SELECT id, puzzle_channel from guilds`
+		queryString := `SELECT id, puzzle_channel, puzzle_role from guilds`
 		rows, err := Database.Query(queryString)
 		if err != nil {
 			log.Println(err)
 		}
 		for rows.Next() {
 			var guild Guild
-			err := rows.Scan(&guild.ID, &guild.PuzzleChannel)
+			err := rows.Scan(&guild.ID, &guild.PuzzleChannel, &guild.PuzzleRole)
 			if err != nil {
 				log.Println(err)
 				continue
@@ -74,8 +74,17 @@ func ProcessPuzzleEmail(mr *mail.Reader, dg *discordgo.Session) {
 			if g.PuzzleChannel == "" {
 				continue
 			}
-			msg := discordgo.MessageSend{
-				Embed: &e,
+			var msg discordgo.MessageSend
+			role, err := dg.State.Role(g.ID, g.PuzzleRole.String)
+			if err != nil {
+				msg = discordgo.MessageSend{
+					Embed: &e,
+				}
+			} else {
+				msg = discordgo.MessageSend{
+					Content: role.Mention(),
+					Embed:   &e,
+				}
 			}
 			m, err := dg.ChannelMessageSendComplex(g.PuzzleChannel, &msg)
 			if err != nil {

@@ -4,11 +4,17 @@ github.com/bwmarrin/discordgo v0.20.2 h1:nA7jiTtqUA9lT93WL2jPjUp8ZTEInRujBdx1C9g
 github.com/bwmarrin/discordgo v0.20.2/go.mod h1:O9S4p+ofTFwB02em7jkpkV8M3R0/PUVOwN61zSZ0r4Q=
 github.com/bwmarrin/discordgo v0.20.3-0.20200525154655-ca64123b05de h1:0TOVVwGrmv0PA+/vuekQIRY9jJ9rcHYnicIaph3/4S4=
 github.com/bwmarrin/discordgo v0.20.3-0.20200525154655-ca64123b05de/go.mod h1:c1WtWUGN6nREDmzIpyTp/iD3VYt4Fpx+bVyfBG7JE+M=
+github.com/bwmarrin/discordgo v0.22.0 h1:uBxY1HmlVCsW1IuaPjpCGT6A2DBwRn0nvOguQIxDdFM=
+github.com/bwmarrin/discordgo v0.22.0/go.mod h1:c1WtWUGN6nREDmzIpyTp/iD3VYt4Fpx+bVyfBG7JE+M=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dustinpianalto/disgoman v0.0.10 h1:UzmvMpOi4peF59tXGaNfVU+ePHs1hILa6gQbjxjWQ9g=
 github.com/dustinpianalto/disgoman v0.0.10/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
+github.com/dustinpianalto/disgoman v0.0.12 h1:dLptU2ZTUZJaLBOKeE6qjuL8gqdAr6ehHSOtfHmUpL8=
+github.com/dustinpianalto/disgoman v0.0.12/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
+github.com/dustinpianalto/rpnparse v1.0.1 h1:ZvH1/RIe5hh3RGSAXOgtngEDHNPTF+DMh88XFWpQjzY=
+github.com/dustinpianalto/rpnparse v1.0.1/go.mod h1:SzFbQb+Eed5gYCtDu/SYEXXwdPtWkDg9oaL1xQtN1BY=
 github.com/emersion/go-imap v1.0.5 h1:8xg/d2wo2BBP3AEP5AOaM/6i8887RGyVW2st/IVHWUw=
 github.com/emersion/go-imap v1.0.5/go.mod h1:yKASt+C3ZiDAiCSssxg9caIckWF/JG7ZQTO7GAmvicU=
 github.com/emersion/go-message v0.11.1/go.mod h1:C4jnca5HOTo4bGN9YdqNQM9sITuT3Y0K6bSUw9RklvY=
