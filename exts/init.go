@@ -15,7 +15,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	// run - function to run - func(anpan.Context, []string) / CommandRunFunc
 	_ = h.AddCommand(&disgoman.Command{
 		Name:                "ping",
-		Aliases:             nil,
+		Aliases:             []string{" "},
 		Description:         "Check the bot's ping",
 		OwnerOnly:           false,
 		Hidden:              false,

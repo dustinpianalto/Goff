@@ -133,3 +133,34 @@ func OnGuildMemberRemoveLogging(s *discordgo.Session, member *discordgo.GuildMem
 	}
 	s.ChannelMessageSendEmbed(channelID, embed)
 }
+
+func AddMemberToDatabase(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("Recovered from panic in AddMemberToDatabase", r)
+		}
+	}()
+	queryString := `INSERT INTO users (id, banned, logging, is_active, is_staff, is_admin) 
+						VALUES ($1, false, false, true, false, false)`
+	_, err := utils.Database.Exec(queryString, m.User.ID)
+	if err != nil {
+		log.Println(fmt.Errorf("error inserting %s into database: %w", m.User.ID, err))
+		return
+	}
+	log.Printf("New User: %s\n", m.User.ID)
+}
+
+func MarkMemberInactive(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("Recovered from panic in MarkMemberInactive")
+		}
+	}()
+	queryString := `UPDATE users SET is_active = false WHERE id = $1`
+	_, err := utils.Database.Exec(queryString, m.User.ID)
+	if err != nil {
+		log.Println(fmt.Errorf("error marking %s as inactive: %w", m.User.ID, err))
+		return
+	}
+	log.Println("User left: %s")
+}

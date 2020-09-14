@@ -11,3 +11,14 @@ type Guild struct {
 	PuzzleChannel  string
 	PuzzleRole     sql.NullString
 }
+
+type User struct {
+	ID       string
+	Banned   bool
+	Logging  bool
+	SteamID  string
+	IsActive bool
+	IsStaff  bool
+	IsAdmin  bool
+	Guilds   []string
+}
