@@ -19,6 +19,9 @@ func ConnectDatabase(dbConnString string) {
 	} else {
 		fmt.Println("Database Connected.")
 	}
+	db.SetMaxOpenConns(75) // The RDS instance has a max of 75 open connections
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(300)
 	Database = db
 }
 
