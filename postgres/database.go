@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	Database *sql.DB
+	DB *sql.DB
 )
 
 func ConnectDatabase(dbConnString string) {
@@ -22,11 +22,11 @@ func ConnectDatabase(dbConnString string) {
 	db.SetMaxOpenConns(75) // The RDS instance has a max of 75 open connections
 	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(300)
-	Database = db
+	DB = db
 }
 
 func InitializeDatabase() {
-	_, err := Database.Query("CREATE TABLE IF NOT EXISTS users(" +
+	_, err := DB.Query("CREATE TABLE IF NOT EXISTS users(" +
 		"id varchar(30) primary key," +
 		"banned bool not null default false," +
 		"logging bool not null default true," +
@@ -38,7 +38,7 @@ func InitializeDatabase() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("CREATE TABLE IF NOT EXISTS guilds(" +
+	_, err = DB.Query("CREATE TABLE IF NOT EXISTS guilds(" +
 		"id varchar(30) primary key," +
 		"welcome_message varchar(1000) NOT NULL DEFAULT ''," +
 		"goodbye_message varchar(1000) NOT NULL DEFAULT ''," +
@@ -48,14 +48,14 @@ func InitializeDatabase() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("CREATE TABLE IF NOT EXISTS prefixes(" +
+	_, err = DB.Query("CREATE TABLE IF NOT EXISTS prefixes(" +
 		"id serial primary key," +
 		"prefix varchar(10) not null unique default 'Go.'" +
 		")")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("CREATE TABLE IF NOT EXISTS tags(" +
+	_, err = DB.Query("CREATE TABLE IF NOT EXISTS tags(" +
 		"id serial primary key," +
 		"tag varchar(100) not null unique," +
 		"content varchar(1000) not null," +
@@ -66,21 +66,21 @@ func InitializeDatabase() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("CREATE TABLE IF NOT EXISTS x_users_guilds(" +
+	_, err = DB.Query("CREATE TABLE IF NOT EXISTS x_users_guilds(" +
 		"guild_id varchar(30) not null references guilds(id)," +
 		"user_id varchar(30) not null references users(id)" +
 		")")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("CREATE TABLE IF NOT EXISTS x_guilds_prefixes(" +
+	_, err = DB.Query("CREATE TABLE IF NOT EXISTS x_guilds_prefixes(" +
 		"guild_id varchar(30) not null references guilds(id)," +
 		"prefix_id int not null references prefixes(id)" +
 		")")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("CREATE TABLE IF NOT EXISTS tasks(" +
+	_, err = DB.Query("CREATE TABLE IF NOT EXISTS tasks(" +
 		"id serial primary key," +
 		"type varchar(10) not null," +
 		"content text not null," +
@@ -94,14 +94,14 @@ func InitializeDatabase() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query(`CREATE TABLE IF NOT EXISTS postfixes(
+	_, err = DB.Query(`CREATE TABLE IF NOT EXISTS postfixes(
 		id serial primary key,
 		name varchar(100) not null,
 		time timestamp not null default NOW())`)
 	if err != nil {
 		log.Println(err)
 	}
-	_, err = Database.Exec(`CREATE TABLE IF NOT EXISTS puzzles(
+	_, err = DB.Exec(`CREATE TABLE IF NOT EXISTS puzzles(
 		id serial primary key,
 		text text not null,
 		time timestamp not null
@@ -109,7 +109,7 @@ func InitializeDatabase() {
 	if err != nil {
 		log.Println(err)
 	}
-	_, err = Database.Exec(`CREATE TABLE IF NOT EXISTS x_guilds_puzzles(
+	_, err = DB.Exec(`CREATE TABLE IF NOT EXISTS x_guilds_puzzles(
 		id serial primary key,
 		guild_id varchar(30) not null references guilds(id),
 		puzzle_id int not null references puzzles(id),
@@ -119,37 +119,37 @@ func InitializeDatabase() {
 }
 
 func LoadTestData() {
-	_, err := Database.Query("INSERT INTO users (id, banned, logging, steam_id, is_active, is_staff, is_admin) values " +
+	_, err := DB.Query("INSERT INTO users (id, banned, logging, steam_id, is_active, is_staff, is_admin) values " +
 		"('351794468870946827', false, true, '76561198024193239', true, true, true)," +
 		"('692908139506434065', false, true, '', true, false, false)," +
 		"('396588996706304010', false, true, '', true, true, false)")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("INSERT INTO guilds (id, welcome_message, goodbye_message) VALUES " +
+	_, err = DB.Query("INSERT INTO guilds (id, welcome_message, goodbye_message) VALUES " +
 		"('265828729970753537', 'Hey there is someone new here.', 'Well fine then... Just leave without saying goodbye')")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("INSERT INTO prefixes (prefix) VALUES ('Godev.'), ('godev.'), ('godev,')")
+	_, err = DB.Query("INSERT INTO prefixes (prefix) VALUES ('Godev.'), ('godev.'), ('godev,')")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("INSERT INTO x_users_guilds (guild_id, user_id) VALUES " +
+	_, err = DB.Query("INSERT INTO x_users_guilds (guild_id, user_id) VALUES " +
 		"('265828729970753537', '351794468870946827')," +
 		"('265828729970753537', '692908139506434065')," +
 		"('265828729970753537', '396588996706304010')")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("INSERT INTO x_guilds_prefixes (guild_id, prefix_id) VALUES " +
+	_, err = DB.Query("INSERT INTO x_guilds_prefixes (guild_id, prefix_id) VALUES " +
 		"('265828729970753537', 1)," +
 		"('265828729970753537', 2)," +
 		"('265828729970753537', 3)")
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = Database.Query("INSERT INTO tags (tag, content, creator, guild_id) VALUES " +
+	_, err = DB.Query("INSERT INTO tags (tag, content, creator, guild_id) VALUES " +
 		"('test', 'This is a test of the tag system', '351794468870946827', '265828729970753537')")
 	if err != nil {
 		fmt.Println(err)
