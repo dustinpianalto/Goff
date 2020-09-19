@@ -7,9 +7,9 @@ COPY ./go.sum .
 RUN go mod download
 
 COPY . .
-RUN go install github.com/dustinpianalto/goff
+RUN go install github.com/dustinpianalto/goff/...
 
-CMD [ "go", "run", "goff.go"]
+CMD [ "go", "run", "cmd/goff/main.go"]
 
 from alpine
 

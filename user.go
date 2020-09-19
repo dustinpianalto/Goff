@@ -1,4 +1,4 @@
-package main
+package goff
 
 type User struct {
 	ID       string

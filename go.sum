@@ -13,6 +13,10 @@ github.com/dustinpianalto/disgoman v0.0.10 h1:UzmvMpOi4peF59tXGaNfVU+ePHs1hILa6g
 github.com/dustinpianalto/disgoman v0.0.10/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
 github.com/dustinpianalto/disgoman v0.0.12 h1:dLptU2ZTUZJaLBOKeE6qjuL8gqdAr6ehHSOtfHmUpL8=
 github.com/dustinpianalto/disgoman v0.0.12/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
+github.com/dustinpianalto/disgoman v0.0.14 h1:hsk56JATBE5eH5GPCDGeiTdYxok4m+edSYiYz5Uj8uo=
+github.com/dustinpianalto/disgoman v0.0.14/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
+github.com/dustinpianalto/disgoman v0.0.15 h1:kdIw6jhC82WBut7+4BarqxBw06dozU+Hu47LQzkkoGM=
+github.com/dustinpianalto/disgoman v0.0.15/go.mod h1:v3FM6n+4dH9XlvO+IDx6MN3DUnGq6YVDBvy1A1k202g=
 github.com/dustinpianalto/rpnparse v1.0.1 h1:ZvH1/RIe5hh3RGSAXOgtngEDHNPTF+DMh88XFWpQjzY=
 github.com/dustinpianalto/rpnparse v1.0.1/go.mod h1:SzFbQb+Eed5gYCtDu/SYEXXwdPtWkDg9oaL1xQtN1BY=
 github.com/emersion/go-imap v1.0.5 h1:8xg/d2wo2BBP3AEP5AOaM/6i8887RGyVW2st/IVHWUw=
