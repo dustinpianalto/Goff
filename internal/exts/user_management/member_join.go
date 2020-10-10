@@ -25,7 +25,7 @@ func OnGuildMemberAdd(s *discordgo.Session, member *discordgo.GuildMemberAdd) {
 			IsStaff:  false,
 			IsAdmin:  false,
 		}
-		err := services.UserService.CreateUser(user)
+		err := services.UserService.CreateUser(user, member.GuildID)
 		if err != nil {
 			log.Println("Error adding user to database: ", err)
 		}
