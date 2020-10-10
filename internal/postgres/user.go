@@ -36,10 +36,13 @@ func (s *UserService) User(id string) (*goff.User, error) {
 	return &u, nil
 }
 
-func (s *UserService) CreateUser(u *goff.User) error {
+func (s *UserService) CreateUser(u *goff.User, gid string) error {
 	queryString := `INSERT INTO users (id, banned, logging, steam_id, is_active, is_staff, is_admin)
-						VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (id) DO NOTHING`
+						VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING`
 	_, err := s.DB.Exec(queryString, u.ID, u.Banned, u.Logging, u.SteamID, u.IsActive, u.IsStaff, u.IsAdmin)
+	if err == nil {
+		err = s.AddUserToGuild(u, &goff.Guild{ID: gid})
+	}
 	return err
 }
 
@@ -59,7 +62,7 @@ func (s *UserService) MarkUserInactive(u *goff.User) error {
 }
 
 func (s *UserService) AddUserToGuild(u *goff.User, g *goff.Guild) error {
-	queryString := `INSERT INTO x_users_guilds (user_id, guild_id) VALUES ($1, $2)`
+	queryString := `INSERT INTO x_users_guilds (user_id, guild_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`
 	_, err := s.DB.Exec(queryString, u.ID, g.ID)
 	return err
 }

@@ -57,7 +57,7 @@ func addTagCommandFunc(ctx disgoman.Context, input []string) {
 				}
 				return
 			}
-			err = services.UserService.CreateUser(&goff.User{ID: ctx.User.ID})
+			err = services.UserService.CreateUser(&goff.User{ID: ctx.User.ID}, ctx.Guild.ID)
 			if err != nil {
 				log.Printf("Error creating user %s: %s", ctx.User.ID, err.Error())
 			}

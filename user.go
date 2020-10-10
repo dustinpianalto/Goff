@@ -13,7 +13,7 @@ type User struct {
 
 type UserService interface {
 	User(id string) (*User, error)
-	CreateUser(u *User) error
+	CreateUser(u *User, gid string) error
 	DeleteUser(u *User) error
 	MarkUserInactive(u *User) error
 	AddUserToGuild(u *User, g *Guild) error
