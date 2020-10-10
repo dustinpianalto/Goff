@@ -131,7 +131,7 @@ func getPrefixes(guildID string) []string {
 		prefixes = append(prefixes, prefix)
 	}
 	if len(prefixes) == 0 {
-		prefixes = append(prefixes, "Godev.", "godev.")
+		prefixes = append(prefixes, "Go.", "go.")
 	}
 	return prefixes
 }
