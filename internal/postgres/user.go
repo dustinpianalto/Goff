@@ -38,7 +38,7 @@ func (s *UserService) User(id string) (*goff.User, error) {
 
 func (s *UserService) CreateUser(u *goff.User) error {
 	queryString := `INSERT INTO users (id, banned, logging, steam_id, is_active, is_staff, is_admin)
-						VALUES ($1, $2, $3, $4, $5, $6, $7)`
+						VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (id) DO NOTHING`
 	_, err := s.DB.Exec(queryString, u.ID, u.Banned, u.Logging, u.SteamID, u.IsActive, u.IsStaff, u.IsAdmin)
 	return err
 }

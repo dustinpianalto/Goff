@@ -7,7 +7,9 @@ import (
 	"strings"
 
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff"
 	"github.com/dustinpianalto/goff/internal/postgres"
+	"github.com/dustinpianalto/goff/internal/services"
 )
 
 var AddTagCommand = &disgoman.Command{
@@ -54,6 +56,10 @@ func addTagCommandFunc(ctx disgoman.Context, input []string) {
 					Error:   err,
 				}
 				return
+			}
+			err = services.UserService.CreateUser(&goff.User{ID: ctx.User.ID})
+			if err != nil {
+				log.Printf("Error creating user %s: %s", ctx.User.ID, err.Error())
 			}
 			queryString = `INSERT INTO tags (tag, content, creator, guild_id) VALUES ($1, $2, $3, $4);`
 			_, err := postgres.DB.Exec(queryString, tag, value, ctx.Message.Author.ID, ctx.Guild.ID)
