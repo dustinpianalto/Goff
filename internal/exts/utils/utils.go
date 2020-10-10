@@ -1,4 +1,4 @@
-package exts
+package utils
 
 import (
 	"fmt"
@@ -12,7 +12,17 @@ import (
 	"github.com/dustinpianalto/goff/internal/discord_utils"
 )
 
-func pingCommand(ctx disgoman.Context, _ []string) {
+var PingCommand = &disgoman.Command{
+	Name:                "ping",
+	Aliases:             []string{" "},
+	Description:         "Check the bot's ping",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              pingCommandFunc,
+}
+
+func pingCommandFunc(ctx disgoman.Context, _ []string) {
 	timeBefore := time.Now()
 	msg, _ := ctx.Send("Pong!")
 	took := time.Now().Sub(timeBefore)
@@ -26,7 +36,17 @@ func pingCommand(ctx disgoman.Context, _ []string) {
 	}
 }
 
-func inviteCommand(ctx disgoman.Context, args []string) {
+var InviteCommand = &disgoman.Command{
+	Name:                "invite",
+	Aliases:             nil,
+	Description:         "Get the invite link for this bot or others",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              inviteCommandFunc,
+}
+
+func inviteCommandFunc(ctx disgoman.Context, args []string) {
 	var ids []string
 	if len(args) == 0 {
 		ids = []string{ctx.Session.State.User.ID}
@@ -48,7 +68,17 @@ func inviteCommand(ctx disgoman.Context, args []string) {
 	}
 }
 
-func gitCommand(ctx disgoman.Context, _ []string) {
+var GitCommand = &disgoman.Command{
+	Name:                "git",
+	Aliases:             nil,
+	Description:         "Show my github link",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              gitCommandFunc,
+}
+
+func gitCommandFunc(ctx disgoman.Context, _ []string) {
 	embed := &discordgo.MessageEmbed{
 		Title: "Hi there, My code is on Github",
 		Color: 0,
@@ -64,7 +94,18 @@ func gitCommand(ctx disgoman.Context, _ []string) {
 	}
 }
 
-func sayCommand(ctx disgoman.Context, args []string) {
+var SayCommand = &disgoman.Command{
+	Name:                "say",
+	Aliases:             nil,
+	Description:         "Repeat a message",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	SanitizeEveryone:    true,
+	Invoke:              sayCommandFunc,
+}
+
+func sayCommandFunc(ctx disgoman.Context, args []string) {
 	resp := strings.Join(args, " ")
 	resp = strings.ReplaceAll(resp, "@everyone", "@\ufff0everyone")
 	resp = strings.ReplaceAll(resp, "@here", "@\ufff0here")
@@ -78,7 +119,17 @@ func sayCommand(ctx disgoman.Context, args []string) {
 	}
 }
 
-func userCommand(ctx disgoman.Context, args []string) {
+var UserCommand = &disgoman.Command{
+	Name:                "user",
+	Aliases:             nil,
+	Description:         "Get user info",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              userCommandFunc,
+}
+
+func userCommandFunc(ctx disgoman.Context, args []string) {
 	var member *discordgo.Member
 	if len(args) == 0 {
 		member, _ = ctx.Session.GuildMember(ctx.Guild.ID, ctx.Message.Author.ID)

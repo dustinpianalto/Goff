@@ -5,10 +5,13 @@ import (
 	"log"
 
 	"github.com/dustinpianalto/disgoman"
-	"github.com/dustinpianalto/goff"
-	"github.com/dustinpianalto/goff/internal/events"
 	"github.com/dustinpianalto/goff/internal/exts"
+	"github.com/dustinpianalto/goff/internal/exts/guild_management"
+	"github.com/dustinpianalto/goff/internal/exts/logging"
+	"github.com/dustinpianalto/goff/internal/exts/tasks"
+	"github.com/dustinpianalto/goff/internal/exts/user_management"
 	"github.com/dustinpianalto/goff/internal/postgres"
+	"github.com/dustinpianalto/goff/internal/services"
 	"github.com/dustinpianalto/goff/pkg/email"
 
 	//"github.com/MikeModder/anpan"
@@ -66,25 +69,20 @@ func main() {
 		CheckPermissions: false,
 	}
 
-	goffManager := goff.CommandManager{
-		UserService:    us,
-		GuildService:   gs,
-		CommandManager: manager,
-	}
-
 	// Add Command Handlers
-	exts.AddCommandHandlers(&goffManager)
+	exts.AddCommandHandlers(&manager)
+	services.InitalizeServices(us, gs)
 
 	//if _, ok := handler.Commands["help"]; !ok {
 	//	handler.AddDefaultHelpCommand()
 	//}
 
-	dg.AddHandler(goffManager.OnMessage)
-	dg.AddHandler(goffManager.StatusManager.OnReady)
-	dg.AddHandler(events.OnMessageUpdate)
-	dg.AddHandler(events.OnMessageDelete)
-	dg.AddHandler(events.OnGuildMemberAddLogging)
-	dg.AddHandler(events.OnGuildMemberRemoveLogging)
+	dg.AddHandler(manager.OnMessage)
+	dg.AddHandler(manager.StatusManager.OnReady)
+	dg.AddHandler(guild_management.OnMessageUpdate)
+	dg.AddHandler(guild_management.OnMessageDelete)
+	dg.AddHandler(user_management.OnGuildMemberAddLogging)
+	dg.AddHandler(user_management.OnGuildMemberRemoveLogging)
 
 	err = dg.Open()
 	if err != nil {
@@ -93,13 +91,13 @@ func main() {
 	}
 
 	// Start the Error handler in a goroutine
-	go ErrorHandler(goffManager.ErrorChannel)
+	go ErrorHandler(manager.ErrorChannel)
 
 	// Start the Logging handler in a goroutine
-	go events.LoggingHandler(events.LoggingChannel)
+	go logging.LoggingHandler(logging.LoggingChannel)
 
 	// Start the task handler in a goroutine
-	go events.ProcessTasks(dg, 1)
+	go tasks.ProcessTasks(dg, 1)
 
 	go email.RecieveEmail(dg)
 
@@ -131,6 +129,9 @@ func getPrefixes(guildID string) []string {
 			return []string{"Go.", "go."}
 		}
 		prefixes = append(prefixes, prefix)
+	}
+	if len(prefixes) == 0 {
+		prefixes = append(prefixes, "Godev.", "godev.")
 	}
 	return prefixes
 }

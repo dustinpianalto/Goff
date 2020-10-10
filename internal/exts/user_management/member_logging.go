@@ -1,4 +1,4 @@
-package events
+package user_management
 
 import (
 	"fmt"

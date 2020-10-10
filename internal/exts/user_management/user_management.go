@@ -1,4 +1,4 @@
-package exts
+package user_management
 
 import (
 	"errors"
@@ -8,10 +8,20 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustinpianalto/disgoman"
-	"github.com/dustinpianalto/goff/internal/events"
+	"github.com/dustinpianalto/goff/internal/exts/logging"
 )
 
-func kickUserCommand(ctx disgoman.Context, args []string) {
+var KickUserCommand = &disgoman.Command{
+	Name:                "kick",
+	Aliases:             nil,
+	Description:         "Kicks the given user with the given reason",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionKickMembers,
+	Invoke:              kickUserFunc,
+}
+
+func kickUserFunc(ctx disgoman.Context, args []string) {
 	var member *discordgo.Member
 	var err error
 	if len(ctx.Message.Mentions) > 0 {
@@ -70,7 +80,7 @@ func kickUserCommand(ctx disgoman.Context, args []string) {
 		return
 	}
 
-	event := &events.LogEvent{
+	event := &logging.LogEvent{
 		Embed: discordgo.MessageEmbed{
 			Title: "User Kicked",
 			Description: fmt.Sprintf(
@@ -85,11 +95,21 @@ func kickUserCommand(ctx disgoman.Context, args []string) {
 		GuildID: ctx.Guild.ID,
 		Session: ctx.Session,
 	}
-	events.LoggingChannel <- event
+	logging.LoggingChannel <- event
 	_, _ = ctx.Send(fmt.Sprintf("User %v#%v has been kicked.", member.User.Username, member.User.Discriminator))
 }
 
-func banUserCommand(ctx disgoman.Context, args []string) {
+var BanUserCommand = &disgoman.Command{
+	Name:                "ban",
+	Aliases:             []string{"ban-no-delete"},
+	Description:         "Bans the given user with the given reason",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionBanMembers,
+	Invoke:              banUserFunc,
+}
+
+func banUserFunc(ctx disgoman.Context, args []string) {
 	var user *discordgo.User
 	var err error
 	if len(ctx.Message.Mentions) > 0 {
@@ -170,7 +190,7 @@ func banUserCommand(ctx disgoman.Context, args []string) {
 		return
 	}
 
-	event := &events.LogEvent{
+	event := &logging.LogEvent{
 		Embed: discordgo.MessageEmbed{
 			Title: "User Banned",
 			Description: fmt.Sprintf(
@@ -185,11 +205,21 @@ func banUserCommand(ctx disgoman.Context, args []string) {
 		GuildID: ctx.Guild.ID,
 		Session: ctx.Session,
 	}
-	events.LoggingChannel <- event
+	logging.LoggingChannel <- event
 	_, _ = ctx.Send(fmt.Sprintf("User %v#%v has been banned.", user.Username, user.Discriminator))
 }
 
-func unbanUserCommand(ctx disgoman.Context, args []string) {
+var UnbanUserCommand = &disgoman.Command{
+	Name:                "unban",
+	Aliases:             nil,
+	Description:         "Unbans the given user",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionBanMembers,
+	Invoke:              unbanUserFunc,
+}
+
+func unbanUserFunc(ctx disgoman.Context, args []string) {
 	var user *discordgo.User
 	var err error
 	if len(ctx.Message.Mentions) > 0 {
@@ -232,7 +262,7 @@ func unbanUserCommand(ctx disgoman.Context, args []string) {
 				}
 				return
 			}
-			event := &events.LogEvent{
+			event := &logging.LogEvent{
 				Embed: discordgo.MessageEmbed{
 					Title: "User Banned",
 					Description: fmt.Sprintf(
@@ -247,7 +277,7 @@ func unbanUserCommand(ctx disgoman.Context, args []string) {
 				GuildID: ctx.Guild.ID,
 				Session: ctx.Session,
 			}
-			events.LoggingChannel <- event
+			logging.LoggingChannel <- event
 			_, _ = ctx.Send(fmt.Sprintf("User %v#%v has been unbanned.", user.Username, user.Discriminator))
 			return
 		}

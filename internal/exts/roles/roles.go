@@ -1,4 +1,4 @@
-package exts
+package roles
 
 import (
 	"fmt"
@@ -10,7 +10,17 @@ import (
 	"github.com/dustinpianalto/goff/internal/postgres"
 )
 
-func makeRoleSelfAssignable(ctx disgoman.Context, args []string) {
+var MakeRoleSelfAssignableCommand = &disgoman.Command{
+	Name:                "make-role-self-assignable",
+	Aliases:             []string{"makesar"},
+	Description:         "Makes the passed in role self assignable by anyone",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              makeRoleSelfAssignableCommandFunc,
+}
+
+func makeRoleSelfAssignableCommandFunc(ctx disgoman.Context, args []string) {
 	var roleString string
 	var roleID string
 	if len(args) > 0 {
@@ -50,7 +60,17 @@ func makeRoleSelfAssignable(ctx disgoman.Context, args []string) {
 	_, _ = ctx.Send(fmt.Sprintf("%s is now self assignable", role.Name))
 }
 
-func removeSelfAssignableRole(ctx disgoman.Context, args []string) {
+var RemoveSelfAssignableCommand = &disgoman.Command{
+	Name:                "remove-self-assignable-role",
+	Aliases:             []string{"removesar"},
+	Description:         "Makes a role that was previously self assignable not so",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              removeSelfAssignableRoleCommandFunc,
+}
+
+func removeSelfAssignableRoleCommandFunc(ctx disgoman.Context, args []string) {
 	var roleString string
 	var roleID string
 	if len(args) > 0 {
@@ -90,7 +110,17 @@ func removeSelfAssignableRole(ctx disgoman.Context, args []string) {
 	_, _ = ctx.Send(fmt.Sprintf("%s's self assignability has been removed.", role.Name))
 }
 
-func selfAssignRole(ctx disgoman.Context, args []string) {
+var SelfAssignRoleCommand = &disgoman.Command{
+	Name:                "giverole",
+	Aliases:             []string{"iwant", "givetome"},
+	Description:         "Assigns a person the passed in role if it is self assignable",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              selfAssignRoleCommandFunc,
+}
+
+func selfAssignRoleCommandFunc(ctx disgoman.Context, args []string) {
 	var roleString string
 	var roleID string
 	if len(args) > 0 {
@@ -148,7 +178,17 @@ func selfAssignRole(ctx disgoman.Context, args []string) {
 	_, _ = ctx.Send(fmt.Sprintf("Congratulations! The %s role has been added to your... Ummm... Thing.", role.Name))
 }
 
-func unAssignRole(ctx disgoman.Context, args []string) {
+var UnAssignRoleCommand = &disgoman.Command{
+	Name:                "removerole",
+	Aliases:             []string{"idon'twant"},
+	Description:         "Removes a role from a person if the role is self assignable",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              unAssignRoleCommandFunc,
+}
+
+func unAssignRoleCommandFunc(ctx disgoman.Context, args []string) {
 	var roleString string
 	var roleID string
 	if len(args) > 0 {

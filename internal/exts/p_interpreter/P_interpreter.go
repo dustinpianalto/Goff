@@ -1,4 +1,4 @@
-package exts
+package p_interpreter
 
 import (
 	"errors"
@@ -8,7 +8,17 @@ import (
 	"github.com/dustinpianalto/disgoman"
 )
 
-func pCommand(ctx disgoman.Context, args []string) {
+var PCommand = &disgoman.Command{
+	Name:                "P",
+	Aliases:             nil,
+	Description:         "Interpret a P\" program and return the results",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              pCommandFunc,
+}
+
+func pCommandFunc(ctx disgoman.Context, args []string) {
 	input := strings.Join(args, "")
 	const LENGTH = 1999
 	var mem [LENGTH]byte

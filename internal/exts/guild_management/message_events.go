@@ -1,4 +1,4 @@
-package events
+package guild_management
 
 import (
 	"fmt"

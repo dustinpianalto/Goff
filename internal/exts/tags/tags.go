@@ -1,4 +1,4 @@
-package exts
+package tags
 
 import (
 	"errors"
@@ -10,7 +10,18 @@ import (
 	"github.com/dustinpianalto/goff/internal/postgres"
 )
 
-func addTagCommand(ctx disgoman.Context, input []string) {
+var AddTagCommand = &disgoman.Command{
+	Name:                "addtag",
+	Aliases:             nil,
+	Description:         "Add a tag",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	SanitizeEveryone:    true,
+	Invoke:              addTagCommandFunc,
+}
+
+func addTagCommandFunc(ctx disgoman.Context, input []string) {
 	if len(input) >= 1 {
 		queryString := `SELECT tags.id, tags.tag, tags.content from tags
 		WHERE tags.guild_id = $1
@@ -75,7 +86,17 @@ func addTagCommand(ctx disgoman.Context, input []string) {
 	}
 }
 
-func tagCommand(ctx disgoman.Context, args []string) {
+var TagCommand = &disgoman.Command{
+	Name:                "tag",
+	Aliases:             nil,
+	Description:         "Get a tag",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              tagCommandFunc,
+}
+
+func tagCommandFunc(ctx disgoman.Context, args []string) {
 	if len(args) >= 1 {
 		tagString := strings.Join(args, " ")
 		queryString := `SELECT tags.id, tags.tag, tags.content from tags

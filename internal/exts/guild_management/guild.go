@@ -1,4 +1,4 @@
-package exts
+package guild_management
 
 import (
 	"database/sql"
@@ -7,11 +7,21 @@ import (
 
 	"github.com/dustinpianalto/disgoman"
 	"github.com/dustinpianalto/goff/internal/postgres"
+	"github.com/dustinpianalto/goff/internal/services"
 )
 
 // Guild management commands
+var SetLoggingChannelCommand = &disgoman.Command{
+	Name:                "set-logging-channel",
+	Aliases:             []string{"slc"},
+	Description:         "Set the channel logging messages will be sent to.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              setLoggingChannelFunc,
+}
 
-func loggingChannel(ctx disgoman.Context, args []string) {
+func setLoggingChannelFunc(ctx disgoman.Context, args []string) {
 	var idString string
 	if len(args) > 0 {
 		idString = args[0]
@@ -21,9 +31,18 @@ func loggingChannel(ctx disgoman.Context, args []string) {
 	} else {
 		idString = ""
 	}
-	fmt.Println(idString)
+	guild, err := services.GuildService.Guild(ctx.Guild.ID)
+	if err != nil {
+		ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Error Updating Database",
+			Error:   err,
+		}
+		return
+	}
 	if idString == "" {
-		_, err := postgres.DB.Exec("UPDATE guilds SET logging_channel='' WHERE id=$1;", ctx.Guild.ID)
+		guild.LoggingChannel = idString
+		err = services.GuildService.UpdateGuild(guild)
 		if err != nil {
 			ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
 				Context: ctx,
@@ -52,7 +71,8 @@ func loggingChannel(ctx disgoman.Context, args []string) {
 		}
 		return
 	}
-	_, err = postgres.DB.Exec("UPDATE guilds SET logging_channel=$1 WHERE id=$2;", idString, ctx.Guild.ID)
+	guild.LoggingChannel = channel.ID
+	err = services.GuildService.UpdateGuild(guild)
 	if err != nil {
 		ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
 			Context: ctx,
@@ -64,7 +84,17 @@ func loggingChannel(ctx disgoman.Context, args []string) {
 	_, _ = ctx.Send("Logging Channel Updated.")
 }
 
-func getLoggingChannel(ctx disgoman.Context, _ []string) {
+var GetLoggingChannelCommand = &disgoman.Command{
+	Name:                "get-logging-channel",
+	Aliases:             []string{"glc"},
+	Description:         "Gets the channel logging messages will be sent to.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              getLoggingChannelFunc,
+}
+
+func getLoggingChannelFunc(ctx disgoman.Context, _ []string) {
 	var channelID string
 	row := postgres.DB.QueryRow("SELECT logging_channel FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(&channelID)
@@ -95,7 +125,17 @@ func getLoggingChannel(ctx disgoman.Context, _ []string) {
 	return
 }
 
-func welcomeChannel(ctx disgoman.Context, args []string) {
+var SetWelcomeChannelCommand = &disgoman.Command{
+	Name:                "set-welcome-channel",
+	Aliases:             []string{"swc"},
+	Description:         "Set the channel welcome messages will be sent to.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              setWelcomeChannelFunc,
+}
+
+func setWelcomeChannelFunc(ctx disgoman.Context, args []string) {
 	var idString string
 	if len(args) > 0 {
 		idString = args[0]
@@ -149,7 +189,17 @@ func welcomeChannel(ctx disgoman.Context, args []string) {
 	return
 }
 
-func getWelcomeChannel(ctx disgoman.Context, _ []string) {
+var GetWelcomeChannelCommand = &disgoman.Command{
+	Name:                "get-welcome-channel",
+	Aliases:             []string{"gwc"},
+	Description:         "Gets the channel welcome messages will be sent to.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              getWelcomeChannelFunc,
+}
+
+func getWelcomeChannelFunc(ctx disgoman.Context, _ []string) {
 	var channelID string
 	row := postgres.DB.QueryRow("SELECT welcome_channel FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(&channelID)
@@ -179,7 +229,17 @@ func getWelcomeChannel(ctx disgoman.Context, _ []string) {
 	_, _ = ctx.Send(fmt.Sprintf("The welcome channel is currently %s", channel.Mention()))
 }
 
-func addGuildCommand(ctx disgoman.Context, args []string) {
+var AddGuildCommand = &disgoman.Command{
+	Name:                "addGuild",
+	Aliases:             nil,
+	Description:         "Adds the current guild to the database",
+	OwnerOnly:           true,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              addGuildCommandFunc,
+}
+
+func addGuildCommandFunc(ctx disgoman.Context, args []string) {
 	var guildID string
 	row := postgres.DB.QueryRow("SELECT id FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(&guildID)
@@ -206,7 +266,17 @@ func addGuildCommand(ctx disgoman.Context, args []string) {
 
 }
 
-func puzzleChannel(ctx disgoman.Context, args []string) {
+var SetPuzzleChannelCommand = &disgoman.Command{
+	Name:                "set-puzzle-channel",
+	Aliases:             []string{"spc"},
+	Description:         "Set the channel puzzle messages will be sent to.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              setPuzzleChannelFunc,
+}
+
+func setPuzzleChannelFunc(ctx disgoman.Context, args []string) {
 	var idString string
 	if len(args) > 0 {
 		idString = args[0]
@@ -259,7 +329,17 @@ func puzzleChannel(ctx disgoman.Context, args []string) {
 	_, _ = ctx.Send("Puzzle Channel Updated.")
 }
 
-func getPuzzleChannel(ctx disgoman.Context, _ []string) {
+var GetPuzzleChannelCommand = &disgoman.Command{
+	Name:                "get-puzzle-channel",
+	Aliases:             []string{"gpc"},
+	Description:         "Gets the channel puzzle messages will be sent to.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              getPuzzleChannelFunc,
+}
+
+func getPuzzleChannelFunc(ctx disgoman.Context, _ []string) {
 	var channelID string
 	row := postgres.DB.QueryRow("SELECT puzzle_channel FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(&channelID)
@@ -290,7 +370,17 @@ func getPuzzleChannel(ctx disgoman.Context, _ []string) {
 	return
 }
 
-func puzzleRole(ctx disgoman.Context, args []string) {
+var SetPuzzleRoleCommand = &disgoman.Command{
+	Name:                "set-puzzle-role",
+	Aliases:             []string{"spr"},
+	Description:         "Set the role to be pinged when there is a new puzzle",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              setPuzzleRoleFunc,
+}
+
+func setPuzzleRoleFunc(ctx disgoman.Context, args []string) {
 	var idString string
 	if len(args) > 0 {
 		idString = args[0]
@@ -344,7 +434,17 @@ func puzzleRole(ctx disgoman.Context, args []string) {
 	_, _ = ctx.Send("Puzzle Role Updated.")
 }
 
-func getPuzzleRole(ctx disgoman.Context, _ []string) {
+var GetPuzzleRoleCommand = &disgoman.Command{
+	Name:                "get-puzzle-role",
+	Aliases:             []string{"gpr"},
+	Description:         "Get the role that will be pinged when there is a new puzzle",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              getPuzzleRoleFunc,
+}
+
+func getPuzzleRoleFunc(ctx disgoman.Context, _ []string) {
 	var roleID sql.NullString
 	row := postgres.DB.QueryRow("SELECT puzzle_role FROM guilds where id=$1", ctx.Guild.ID)
 	err := row.Scan(&roleID)

@@ -1,4 +1,4 @@
-package exts
+package tasks
 
 import (
 	"errors"
@@ -13,7 +13,17 @@ import (
 	"github.com/olebedev/when/rules/en"
 )
 
-func addReminderCommand(ctx disgoman.Context, args []string) {
+var AddReminderCommand = &disgoman.Command{
+	Name:                "remind",
+	Aliases:             nil,
+	Description:         "Remind me at a later time",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	Invoke:              addReminderFunc,
+}
+
+func addReminderFunc(ctx disgoman.Context, args []string) {
 	w := when.New(nil)
 	w.Add(en.All...)
 	w.Add(common.All...)
