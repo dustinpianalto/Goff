@@ -4,6 +4,7 @@ import (
 	"github.com/dustinpianalto/disgoman"
 	"github.com/dustinpianalto/goff/internal/exts/fun"
 	"github.com/dustinpianalto/goff/internal/exts/guild_management"
+	"github.com/dustinpianalto/goff/internal/exts/info"
 	"github.com/dustinpianalto/goff/internal/exts/roles"
 	"github.com/dustinpianalto/goff/internal/exts/tags"
 	"github.com/dustinpianalto/goff/internal/exts/tasks"
@@ -52,5 +53,5 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	_ = h.AddCommand(guild_management.GetPuzzleChannelCommand)
 	_ = h.AddCommand(guild_management.SetPuzzleRoleCommand)
 	_ = h.AddCommand(guild_management.GetPuzzleRoleCommand)
-
+	_ = h.AddCommand(info.HelpCommand)
 }
