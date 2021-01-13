@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goff
+  namespace: default
+  labels:
+    app: goff
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goff
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: goff
+    spec:
+      containers:
+        - name: goff
+          image: <IMAGE>
