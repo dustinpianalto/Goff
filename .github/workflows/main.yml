@@ -24,7 +24,7 @@ jobs:
       - name: Build container image
         env:
           IMAGE_TAG: ${{ steps.get_version.outputs.version-without-v }}
-          run: docker build -t registry.digitalocean.com/djpianalto/goff:$IMAGE_TAG
+        run: docker build -t registry.digitalocean.com/djpianalto/goff:$IMAGE_TAG
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
