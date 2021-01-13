@@ -23,3 +23,24 @@ spec:
       containers:
         - name: goff
           image: <IMAGE>
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: goff
+                  key: database_url
+            - name: DISCORDGO_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: goff
+                  key: discord_token
+            - name: GOFF_EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: goff
+                  key: email_username
+            - name: GOFF_EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: goff
+                  key: email_password
