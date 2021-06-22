@@ -45,6 +45,7 @@ func OnGuildMemberAdd(s *discordgo.Session, member *discordgo.GuildMemberAdd) {
 	if err != nil {
 		log.Println("Error getting Auto Join Roles: ", err)
 	}
+	log.Println(roles)
 	for _, r := range roles {
 		role, err := s.State.Role(member.GuildID, r.ID)
 		if err != nil {
