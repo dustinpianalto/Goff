@@ -41,6 +41,22 @@ func OnGuildMemberAdd(s *discordgo.Session, member *discordgo.GuildMemberAdd) {
 	if err != nil {
 		log.Println("Error adding user to guild: ", err)
 	}
+	roles, err := services.RoleService.GetAutoRoles(member.GuildID)
+	if err != nil {
+		log.Println("Error getting Auto Join Roles: ", err)
+	}
+	for _, r := range roles {
+		role, err := s.State.Role(member.GuildID, r.ID)
+		if err != nil {
+			log.Println("Error getting role: ", err)
+			continue
+		}
+		err = s.GuildMemberRoleAdd(member.GuildID, member.User.ID, role.ID)
+		if err != nil {
+			log.Println("Error adding Role to member: ", err)
+			continue
+		}
+	}
 }
 
 func OnGuildMemberRemove(s *discordgo.Session, member *discordgo.GuildMemberRemove) {

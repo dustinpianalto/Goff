@@ -51,6 +51,7 @@ func main() {
 
 	us := &postgres.UserService{DB: postgres.DB}
 	gs := &postgres.GuildService{DB: postgres.DB}
+	rs := &postgres.RoleService{DB: postgres.DB}
 
 	//prefixes := []string{
 	//	"Go.",
@@ -71,7 +72,7 @@ func main() {
 
 	// Add Command Handlers
 	exts.AddCommandHandlers(&manager)
-	services.InitalizeServices(us, gs)
+	services.InitalizeServices(us, gs, rs)
 
 	//if _, ok := handler.Commands["help"]; !ok {
 	//	handler.AddDefaultHelpCommand()

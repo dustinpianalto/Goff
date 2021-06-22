@@ -32,6 +32,10 @@ var postfixes = []postfix{
 		Name:   "4_Add_Multi_Column_Unique_XUsersGuilds",
 		Invoke: addMultiColumnUniqueXUsersGuilds,
 	},
+	postfix{
+		Name:   "5_Add_Auto_Role_To_Roles_Table",
+		Invoke: addAutoRoleToRoles,
+	},
 }
 
 func RunPostfixes() {
@@ -154,6 +158,23 @@ func addMultiColumnUniqueXUsersGuilds(revert bool) error {
 						ADD CONSTRAINT u_user_guild UNIQUE(user_id, guild_id)`
 	} else {
 		queryString = `ALTER TABLE DROP CONSTRAINT u_user_guild IF EXISTS`
+	}
+	_, err := DB.Exec(queryString)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func addAutoRoleToRoles(revert bool) error {
+	var queryString string
+	if !revert {
+		queryString = `ALTER TABLE roles
+						ADD COLUMN auto_role bool DEFAULT false`
+	} else {
+		queryString = `ALTER TABLE roles
+						DROP COLUMN auto_role`
 	}
 	_, err := DB.Exec(queryString)
 	if err != nil {

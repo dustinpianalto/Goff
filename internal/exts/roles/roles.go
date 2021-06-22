@@ -7,7 +7,9 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustinpianalto/disgoman"
+	"github.com/dustinpianalto/goff"
 	"github.com/dustinpianalto/goff/internal/postgres"
+	"github.com/dustinpianalto/goff/internal/services"
 )
 
 var MakeRoleSelfAssignableCommand = &disgoman.Command{
@@ -253,4 +255,135 @@ func memberHasRole(m *discordgo.Member, id string) bool {
 		}
 	}
 	return false
+}
+
+var MakeAutoRoleCommand = &disgoman.Command{
+	Name:                "make-auto-role",
+	Aliases:             []string{"makear"},
+	Description:         "Marks the passed in role to auto add to new members.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              makeAutoRoleCommandFunc,
+}
+
+func makeAutoRoleCommandFunc(ctx disgoman.Context, args []string) {
+	var roleString string
+	var roleID string
+	if len(args) > 0 {
+		roleString = strings.Join(args, " ")
+		if strings.HasPrefix(roleString, "<@&") && strings.HasSuffix(roleString, ">") {
+			roleID = roleString[3 : len(roleString)-1]
+		} else if _, err := strconv.Atoi(roleString); err == nil {
+			roleID = roleString
+		} else {
+			for _, role := range ctx.Guild.Roles {
+				if roleString == role.Name {
+					roleID = role.ID
+				}
+			}
+		}
+	}
+	fmt.Println(roleID)
+	var r *discordgo.Role
+	var err error
+	if r, err = ctx.Session.State.Role(ctx.Guild.ID, roleID); err != nil {
+		ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Can't find that Role.",
+			Error:   err,
+		}
+		return
+	}
+	role, err := services.RoleService.Role(r.ID)
+	if err != nil {
+		role = &goff.Role{
+			ID:             r.ID,
+			IsModerator:    false,
+			IsAdmin:        false,
+			SelfAssignable: false,
+			AutoRole:       true,
+			Guild:          ctx.Guild.ID,
+		}
+		role, err = services.RoleService.AddRole(role)
+		if err != nil {
+			ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+				Context: ctx,
+				Message: "Error making an Auto Role",
+				Error:   err,
+			}
+			return
+		}
+	} else {
+		err = services.RoleService.MakeAutoRole(role)
+		if err != nil {
+			ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+				Context: ctx,
+				Message: "Error making an Auto Role",
+				Error:   err,
+			}
+			return
+		}
+	}
+
+}
+
+var RemoveAutoRoleCommand = &disgoman.Command{
+	Name:                "remove-auto-role",
+	Aliases:             []string{"removear"},
+	Description:         "Remove role from those added to new members.",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: disgoman.PermissionManageServer,
+	Invoke:              removeAutoRoleCommandFunc,
+}
+
+func removeAutoRoleCommandFunc(ctx disgoman.Context, args []string) {
+	var roleString string
+	var roleID string
+	if len(args) > 0 {
+		roleString = strings.Join(args, " ")
+		if strings.HasPrefix(roleString, "<@&") && strings.HasSuffix(roleString, ">") {
+			roleID = roleString[3 : len(roleString)-1]
+		} else if _, err := strconv.Atoi(roleString); err == nil {
+			roleID = roleString
+		} else {
+			for _, role := range ctx.Guild.Roles {
+				if roleString == role.Name {
+					roleID = role.ID
+				}
+			}
+		}
+	}
+	fmt.Println(roleID)
+	var r *discordgo.Role
+	var err error
+	if r, err = ctx.Session.State.Role(ctx.Guild.ID, roleID); err != nil {
+		ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Can't find that Role.",
+			Error:   err,
+		}
+		return
+	}
+	role, err := services.RoleService.Role(r.ID)
+	if err != nil {
+		ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Role was not configured as an Auto Role",
+			Error:   err,
+		}
+		return
+	} else {
+		err = services.RoleService.RemoveAutoRole(role)
+		if err != nil {
+			ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+				Context: ctx,
+				Message: "Error removing Auto Role",
+				Error:   err,
+			}
+			return
+		}
+	}
+
 }
