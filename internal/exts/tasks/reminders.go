@@ -100,6 +100,7 @@ func getTasksToRun() []Task {
 	res, err := postgres.DB.Query(query, time.Now())
 	if err != nil {
 		log.Println(err)
+		return nil
 	}
 	var tasks []Task
 	for res.Next() {
