@@ -63,7 +63,7 @@ func (s *RoleService) RemoveAutoRole(r *goff.Role) error {
 
 func (s *RoleService) GetAutoRoles(gID string) ([]*goff.Role, error) {
 	var roles []*goff.Role
-	queryString := `SELECT id FROM roles WHERE guild_id = $1`
+	queryString := `SELECT id FROM roles WHERE guild_id = $1 AND auto_role = true`
 	rows, err := s.DB.Query(queryString, gID)
 	if err != nil {
 		return nil, err
