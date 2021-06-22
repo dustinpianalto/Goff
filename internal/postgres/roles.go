@@ -22,7 +22,7 @@ func (s *RoleService) Role(id string) (*goff.Role, error) {
 }
 
 func (s *RoleService) AddRole(r *goff.Role) (*goff.Role, error) {
-	queryString := `INSERT INTO roles (id, moderator, admin, self_assignable, auto_role, guild)
+	queryString := `INSERT INTO roles (id, moderator, admin, self_assignable, auto_role, guild_id)
 						VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING`
 	_, err := s.DB.Exec(queryString, r.ID, r.IsModerator, r.IsAdmin, r.SelfAssignable, r.AutoRole, r.Guild)
 	if err != nil {
