@@ -34,6 +34,8 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	_ = h.AddCommand(roles.RemoveSelfAssignableCommand)
 	_ = h.AddCommand(roles.SelfAssignRoleCommand)
 	_ = h.AddCommand(roles.UnAssignRoleCommand)
+	_ = h.AddCommand(roles.MakeAutoRoleCommand)
+	_ = h.AddCommand(roles.RemoveAutoRoleCommand)
 	_ = h.AddCommand(p_interpreter.PCommand)
 	_ = h.AddCommand(fun.InterleaveCommand)
 	_ = h.AddCommand(fun.DeinterleaveCommand)
