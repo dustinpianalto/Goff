@@ -325,7 +325,7 @@ func makeAutoRoleCommandFunc(ctx disgoman.Context, args []string) {
 			return
 		}
 	}
-
+	_, _ = ctx.Send(fmt.Sprintf("%s will be added to all new memebers.", r.Name))
 }
 
 var RemoveAutoRoleCommand = &disgoman.Command{
@@ -385,5 +385,5 @@ func removeAutoRoleCommandFunc(ctx disgoman.Context, args []string) {
 			return
 		}
 	}
-
+	_, _ = ctx.Send(fmt.Sprintf("%s will no longer be added to all new memebers.", r.Name))
 }
