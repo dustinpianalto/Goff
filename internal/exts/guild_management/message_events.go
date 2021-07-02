@@ -29,6 +29,9 @@ func OnMessageUpdate(session *discordgo.Session, m *discordgo.MessageUpdate) {
 		log.Println(err)
 		return
 	}
+	if m.Content == "" {
+		return
+	}
 	embed := &discordgo.MessageEmbed{
 		Title:       fmt.Sprintf("Message Edited: %v", msg.ID),
 		Description: fmt.Sprintf("**Before:** %v\n**After:** %v\nIn Channel: %v", msg.Content, m.Content, channel.Mention()),
