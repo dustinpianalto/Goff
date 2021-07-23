@@ -32,7 +32,7 @@ func ParseDateString(inTime time.Time) string {
 	} else {
 		dateString = "Now"
 	}
-	stamp := inTime.Format("2006-01-02 15:04:05")
+	stamp := inTime.Format("2006-01-02 15:04:05.000")
 	return fmt.Sprintf("%v\n%v", dateString, stamp)
 }
 
