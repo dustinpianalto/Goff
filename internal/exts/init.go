@@ -27,6 +27,7 @@ func AddCommandHandlers(h *disgoman.CommandManager) {
 	_ = h.AddCommand(utils.GitCommand)
 	_ = h.AddCommand(utils.InviteCommand)
 	_ = h.AddCommand(utils.PingCommand)
+	_ = h.AddCommand(utils.SnowflakeCommand)
 	_ = h.AddCommand(tasks.AddReminderCommand)
 	_ = h.AddCommand(tags.AddTagCommand)
 	_ = h.AddCommand(tags.TagCommand)

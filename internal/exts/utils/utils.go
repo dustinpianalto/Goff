@@ -218,3 +218,32 @@ func userCommandFunc(ctx disgoman.Context, args []string) {
 		}
 	}
 }
+
+var SnowflakeCommand = &disgoman.Command{
+	Name:                "s",
+	Aliases:             nil,
+	Description:         "Return the parts of a snowflake",
+	OwnerOnly:           false,
+	Hidden:              false,
+	RequiredPermissions: 0,
+	SanitizeEveryone:    true,
+	Invoke:              snowflakeCommandFunc,
+}
+
+func snowflakeCommandFunc(ctx disgoman.Context, args []string) {
+	int64ID, err := strconv.ParseInt(args[0], 10, 64)
+	if err != nil {
+		ctx.CommandManager.ErrorChannel <- disgoman.CommandError{
+			Context: ctx,
+			Message: "Not a valid ID",
+			Error:   err,
+		}
+		return
+	}
+	s := discord_utils.ParseSnowflake(int64ID)
+	embed := &discordgo.MessageEmbed{
+		Title:       args[0],
+		Description: fmt.Sprintf("Created: %s\nWorker: %d\nProcess: %d\nCounter: %d", discord_utils.ParseDateString(s.CreationTime), s.WorkerID, s.ProcessID, s.Increment),
+	}
+	_, _ = ctx.Session.ChannelMessageSendEmbed(ctx.Channel.ID, embed)
+}
