@@ -86,6 +86,7 @@ func main() {
 	dg.AddHandler(user_management.OnGuildMemberAdd)
 	dg.AddHandler(user_management.OnGuildMemberRemoveLogging)
 	dg.AddHandler(user_management.OnGuildMemberRemove)
+	dg.AddHandler(user_management.OnGuildMemberUpdate)
 
 	err = dg.Open()
 	if err != nil {
