@@ -103,13 +103,7 @@ func OnGuildMemberUpdate(s *discordgo.Session, member *discordgo.GuildMemberUpda
 			log.Println("Error getting Auto Join Roles: ", err)
 		}
 		log.Println(roles)
-	RoleLoop:
 		for _, r := range roles {
-			for _, rl := range member.Roles {
-				if rl == r.ID {
-					continue RoleLoop
-				}
-			}
 			role, err := s.State.Role(member.GuildID, r.ID)
 			if err != nil {
 				log.Println("Error getting role: ", err)
