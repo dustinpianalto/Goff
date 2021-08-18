@@ -163,5 +163,4 @@ func MarkMemberInactive(s *discordgo.Session, m *discordgo.GuildMemberRemove) {
 		log.Println(fmt.Errorf("error marking %s as inactive: %w", m.User.ID, err))
 		return
 	}
-	log.Println("User left: %s")
 }

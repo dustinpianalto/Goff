@@ -41,21 +41,23 @@ func OnGuildMemberAdd(s *discordgo.Session, member *discordgo.GuildMemberAdd) {
 	if err != nil {
 		log.Println("Error adding user to guild: ", err)
 	}
-	roles, err := services.RoleService.GetAutoRoles(member.GuildID)
-	if err != nil {
-		log.Println("Error getting Auto Join Roles: ", err)
-	}
-	log.Println(roles)
-	for _, r := range roles {
-		role, err := s.State.Role(member.GuildID, r.ID)
+	if !member.Member.Pending {
+		roles, err := services.RoleService.GetAutoRoles(member.GuildID)
 		if err != nil {
-			log.Println("Error getting role: ", err)
-			continue
+			log.Println("Error getting Auto Join Roles: ", err)
 		}
-		err = s.GuildMemberRoleAdd(member.GuildID, member.User.ID, role.ID)
-		if err != nil {
-			log.Println("Error adding Role to member: ", err)
-			continue
+		log.Println(roles)
+		for _, r := range roles {
+			role, err := s.State.Role(member.GuildID, r.ID)
+			if err != nil {
+				log.Println("Error getting role: ", err)
+				continue
+			}
+			err = s.GuildMemberRoleAdd(member.GuildID, member.User.ID, role.ID)
+			if err != nil {
+				log.Println("Error adding Role to member: ", err)
+				continue
+			}
 		}
 	}
 }
@@ -85,6 +87,39 @@ func OnGuildMemberRemove(s *discordgo.Session, member *discordgo.GuildMemberRemo
 		err = services.UserService.MarkUserInactive(user)
 		if err != nil {
 			log.Println("Error marking user as inactive: ", err)
+		}
+	}
+}
+
+func OnGuildMemberUpdate(s *discordgo.Session, member *discordgo.GuildMemberUpdate) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("Recovered from panic in OnGuildMemberUpdate: ", r)
+		}
+	}()
+	if !member.Member.Pending {
+		roles, err := services.RoleService.GetAutoRoles(member.GuildID)
+		if err != nil {
+			log.Println("Error getting Auto Join Roles: ", err)
+		}
+		log.Println(roles)
+	RoleLoop:
+		for _, r := range roles {
+			for _, rl := range member.Roles {
+				if rl == r.ID {
+					continue RoleLoop
+				}
+			}
+			role, err := s.State.Role(member.GuildID, r.ID)
+			if err != nil {
+				log.Println("Error getting role: ", err)
+				continue
+			}
+			err = s.GuildMemberRoleAdd(member.GuildID, member.User.ID, role.ID)
+			if err != nil {
+				log.Println("Error adding Role to member: ", err)
+				continue
+			}
 		}
 	}
 }
