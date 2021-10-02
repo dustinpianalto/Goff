@@ -44,3 +44,5 @@ spec:
                 secretKeyRef:
                   name: goff
                   key: email_password
+      imagePullSecrets:
+        - name: registry-2
