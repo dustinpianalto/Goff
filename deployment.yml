@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: goff
-  namespace: default
+  namespace: discord-bots
   labels:
     app: goff
 spec:
@@ -23,6 +23,13 @@ spec:
       containers:
         - name: goff
           image: <IMAGE>
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "1"
+            limits:
+              memory: "1Gi"
+              cpu: "2"
           env:
             - name: DATABASE_URL
               valueFrom:
