@@ -52,4 +52,4 @@ spec:
                   name: goff
                   key: email_password
       imagePullSecrets:
-        - name: registry-2
+        - name: registry-1
