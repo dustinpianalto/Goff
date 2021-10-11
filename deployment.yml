@@ -41,6 +41,11 @@ spec:
                 secretKeyRef:
                   name: goff
                   key: pgbouncer_ssl
+            - name: AUTH_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: goff
+                  key: pgbouncer_auth
           ports:
             - containerPort: 5432
         - name: goff
