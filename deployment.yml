@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: pgbouncer
-          image: timoha/pgbouncer
+          image: timoha/pgbouncer:1.15.0
           resources:
             requests:
               memory: "256Mi"
