@@ -36,6 +36,8 @@ spec:
                 secretKeyRef:
                   name: goff
                   key: pgbouncer_url
+            - name: SERVER_TLS_SSLMODE
+              value: require
           ports:
             - containerPort: 5432
         - name: goff
